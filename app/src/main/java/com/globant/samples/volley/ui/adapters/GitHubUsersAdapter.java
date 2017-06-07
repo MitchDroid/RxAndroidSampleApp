@@ -1,7 +1,7 @@
-package com.globant.samples.volley.adapters;
+package com.globant.samples.volley.ui.adapters;
 
 import android.content.Context;
-import android.support.v4.widget.ViewDragHelper;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.globant.samples.volley.R;
-import com.globant.samples.volley.model.GithubUser;
-import com.globant.samples.volley.model.Item;
+import com.globant.samples.volley.data.model.Item;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,7 +29,9 @@ public class GitHubUsersAdapter extends RecyclerView.Adapter<GitHubUsersAdapter.
 
     private List<Item> mList;
     private Context mContext;
+    OnItemClickListener mItemClickListener;
 
+    @Inject
     public GitHubUsersAdapter(Context context) {
         this.mList = new ArrayList<>();
         this.mContext = context;
@@ -47,8 +50,10 @@ public class GitHubUsersAdapter extends RecyclerView.Adapter<GitHubUsersAdapter.
         holder.setUserImage(user.getAvatarUrl());
         holder.name.setText(user.getLogin());
         holder.url.setText(user.getUrl());
+    }
 
-
+    public Item get(int positon) {
+        return mList.get(positon);
     }
 
     public void populateUsersList(List<Item> list) {
@@ -61,25 +66,46 @@ public class GitHubUsersAdapter extends RecyclerView.Adapter<GitHubUsersAdapter.
         return mList.size();
     }
 
-    public class GitHubUsersAdapterViewHolder extends RecyclerView.ViewHolder {
 
+    public class GitHubUsersAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        @BindView(R.id.card_user_item_view)
+        CardView mCardView;
+
+        @BindView(R.id.image)
         ImageView image;
 
+        @BindView(R.id.name)
         TextView name;
 
+        @BindView(R.id.url)
         TextView url;
 
         public GitHubUsersAdapterViewHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
 
-            image = (ImageView) itemView.findViewById(R.id.image);
-            name = (TextView) itemView.findViewById(R.id.name);
-            url = (TextView) itemView.findViewById(R.id.url);
+            mCardView.setOnClickListener(this);
 
         }
 
         public void setUserImage(String url) {
             Picasso.with(mContext).load(url).fit().into(image);
         }
+
+        public void onClick(View view) {
+            if (mItemClickListener != null) {
+                mItemClickListener.onItemClick(view, getAdapterPosition());
+            }
+        }
+
+    }
+
+    public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
+        this.mItemClickListener = mItemClickListener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
     }
 }
