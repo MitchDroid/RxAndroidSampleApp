@@ -9,19 +9,23 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/card_user_detail"
-        android:layout_width="368dp"
+        android:layout_width="match_parent"
+        android:layout_marginTop="5dp"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
         app:cardCornerRadius="5dp"
         app:cardElevation="@dimen/cardview_compat_inset_shadow"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:layout_editor_absoluteY="16dp"
-        tools:layout_editor_absoluteX="8dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
-            android:layout_margin="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:orientation="vertical">
 
             <ImageView
