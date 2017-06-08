@@ -2,7 +2,6 @@ package com.globant.samples.volley.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.SyncStateContract;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -22,7 +21,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class MainActivity extends BaseActivity implements UserView {
+public class GithubUserActivity extends BaseActivity implements UserView {
 
     String url = "https://api.github.com/search/users?q=tom+repos:%3E42+followers:%3E50";
 
@@ -64,11 +63,16 @@ public class MainActivity extends BaseActivity implements UserView {
             callActivity(intent);
         });
 
-        fetchJSONResponse();
+        //fetchJSONVolleyResponse();
+        fetchJSONRetrofitResponse();
     }
 
-    private void fetchJSONResponse() {
+    private void fetchJSONVolleyResponse() {
         mUserPresenter.getGithubUsers();
+    }
+
+    private void fetchJSONRetrofitResponse() {
+        mUserPresenter.doActionGithubUser();
     }
 
 

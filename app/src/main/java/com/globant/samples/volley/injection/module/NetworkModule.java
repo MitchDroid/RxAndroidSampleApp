@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.globant.samples.volley.data.remote.UserApiService;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -24,6 +26,12 @@ public class NetworkModule {
     @Provides
     public SharedPreferences provideSharedPreferences(Application application) {
         return application.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+    }
+
+    @Singleton
+    @Provides
+    public UserApiService userApiService() {
+        return UserApiService.Factory.create();
     }
 
 }

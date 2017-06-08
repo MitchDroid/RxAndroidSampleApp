@@ -15,6 +15,6 @@ public class ApiConstants {
     }
 
     //API URL
-    public static final String BASE_URL = "https://api.github.com/search/users?q=tom+repos:%3E42+followers:%3E50";
-
+    public static final String BASE_URL = "https://api.github.com";
+    public static final String BASE_URL_USERS = "/search/users?q=tom+repos:%3E42+followers:%3E50";
 }

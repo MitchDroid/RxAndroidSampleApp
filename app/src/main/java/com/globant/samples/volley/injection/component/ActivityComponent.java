@@ -6,7 +6,7 @@ import com.globant.samples.volley.injection.module.ActivityModule;
 import com.globant.samples.volley.injection.qualifier.ActivityContext;
 import com.globant.samples.volley.injection.scope.PerActivity;
 import com.globant.samples.volley.ui.activities.BaseActivity;
-import com.globant.samples.volley.ui.activities.MainActivity;
+import com.globant.samples.volley.ui.activities.GithubUserActivity;
 import com.globant.samples.volley.ui.activities.UserDetailActivity;
 
 import dagger.Component;
@@ -23,7 +23,7 @@ public interface ActivityComponent {
 
     void inject(BaseActivity baseActivity);
 
-    void inject(MainActivity mainActivity);
+    void inject(GithubUserActivity githubUserActivity);
 
     void inject(UserDetailActivity userDetailActivity);
 

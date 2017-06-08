@@ -81,6 +81,12 @@ dependencies {
     compile "com.jakewharton.rxbinding:rxbinding-recyclerview-v7:$RX_BINDING_VERSION"
     compile "com.jakewharton.rxbinding:rxbinding-leanback-v17:$RX_BINDING_VERSION"
 
+    //Retrofit
+    compile "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
+    compile "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
+    compile "com.squareup.retrofit2:adapter-rxjava:$RETROFIT_VERSION"
+    compile "com.squareup.okhttp3:logging-interceptor:+"
+
     //Volley
     compile 'com.android.volley:volley:1.0.0'
 

@@ -4,6 +4,7 @@ package com.globant.samples.volley.injection.component;
 import android.app.Application;
 import android.content.Context;
 
+import com.globant.samples.volley.data.remote.DataManager;
 import com.globant.samples.volley.injection.module.ApplicationModule;
 import com.globant.samples.volley.injection.module.NetworkModule;
 import com.globant.samples.volley.injection.qualifier.ApplicationContext;
@@ -25,5 +26,7 @@ public interface ApplicationComponent {
 
     @ApplicationContext
     Context context();
+
+    DataManager dataManager();
 
 }

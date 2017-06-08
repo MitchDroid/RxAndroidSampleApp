@@ -6,6 +6,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.globant.samples.volley.ApplicationController;
 import com.globant.samples.volley.data.model.GithubUser;
 import com.globant.samples.volley.data.remote.ApiConstants;
+import com.globant.samples.volley.data.remote.DataManager;
 import com.globant.samples.volley.ui.view.UserView;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -13,6 +14,8 @@ import com.google.gson.JsonParser;
 
 import javax.inject.Inject;
 
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -23,10 +26,11 @@ import timber.log.Timber;
 public class UserPresenter extends BasePresenter<UserView> {
 
     CompositeSubscription mCompositeSubscription;
-
+    private final DataManager mDataManager;
 
     @Inject
-    public UserPresenter() {
+    public UserPresenter(DataManager dataManager) {
+        this.mDataManager = dataManager;
     }
 
     @Override
@@ -46,6 +50,9 @@ public class UserPresenter extends BasePresenter<UserView> {
         }
     }
 
+    /*Unused
+    * This method implements Volley Library
+    * */
     public void getGithubUsers() {
         checkViewAttached();
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, ApiConstants.BASE_URL, null, response -> {
@@ -67,6 +74,20 @@ public class UserPresenter extends BasePresenter<UserView> {
 
         /* Add your Requests to the RequestQueue to execute */
         ApplicationController.getInstance().addToRequestQueue(req);
+    }
+
+    /*This method implements Retrofit Library using RxAndroid*/
+    public void doActionGithubUser() {
+        checkViewAttached();
+        mCompositeSubscription.add(mDataManager.getGithubUsers().filter(githubUser -> githubUser != null)
+                .observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+                .subscribe(githubUser -> {
+                    if (githubUser != null) {
+                        Timber.d("GITHUB USERS SIZE %s ", githubUser.getItems().size());
+                        getMvpView().getGithubUsers(githubUser.getItems());
+                    }
+
+                }, throwable -> getMvpView().showError(throwable.getMessage(), ApiConstants.LOW_ERROR)));
     }
 
 }
