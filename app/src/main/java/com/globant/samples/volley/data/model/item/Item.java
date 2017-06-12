@@ -1,4 +1,4 @@
-package com.globant.samples.volley.data.model;
+package com.globant.samples.volley.data.model.item;
 
 /**
  * Created by miller.barrera on 5/06/2017.

@@ -1,19 +1,21 @@
-package com.globant.samples.volley.ui.presenter;
+package com.globant.samples.volley.ui.presenter.user;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.globant.samples.volley.ApplicationController;
-import com.globant.samples.volley.data.model.GithubUser;
+import com.globant.samples.volley.data.model.user.GithubUser;
 import com.globant.samples.volley.data.remote.ApiConstants;
 import com.globant.samples.volley.data.remote.DataManager;
-import com.globant.samples.volley.ui.view.UserView;
+import com.globant.samples.volley.ui.presenter.base.BasePresenter;
+import com.globant.samples.volley.ui.view.user.UserView;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -76,7 +78,8 @@ public class UserPresenter extends BasePresenter<UserView> {
         ApplicationController.getInstance().addToRequestQueue(req);
     }
 
-    /*This method implements Retrofit Library using RxAndroid*/
+    /*Unused
+    This method implements Retrofit Library using RxAndroid*/
     public void doActionGithubUser() {
         checkViewAttached();
         mCompositeSubscription.add(mDataManager.getGithubUsers().filter(githubUser -> githubUser != null)
@@ -88,6 +91,15 @@ public class UserPresenter extends BasePresenter<UserView> {
                     }
 
                 }, throwable -> getMvpView().showError(throwable.getMessage(), ApiConstants.LOW_ERROR)));
+    }
+
+    /**
+     * This method returns the data Manager
+     * Observable to be subscribe - Unsubscribe
+     * directly into Activity
+     */
+    public Observable<GithubUser> doAction() {
+        return mDataManager.getGithubUsers();
     }
 
 }

@@ -5,9 +5,9 @@ import android.content.Context;
 import com.globant.samples.volley.injection.module.ActivityModule;
 import com.globant.samples.volley.injection.qualifier.ActivityContext;
 import com.globant.samples.volley.injection.scope.PerActivity;
-import com.globant.samples.volley.ui.activities.BaseActivity;
-import com.globant.samples.volley.ui.activities.GithubUserActivity;
-import com.globant.samples.volley.ui.activities.UserDetailActivity;
+import com.globant.samples.volley.ui.activities.base.BaseActivity;
+import com.globant.samples.volley.ui.activities.details.UserDetailActivity;
+import com.globant.samples.volley.ui.activities.user.GithubUserActivity;
 
 import dagger.Component;
 

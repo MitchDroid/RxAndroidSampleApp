@@ -1,4 +1,4 @@
-package com.globant.samples.volley.ui.adapters;
+package com.globant.samples.volley.ui.adapters.user;
 
 import android.content.Context;
 import android.support.v7.widget.CardView;
@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.globant.samples.volley.R;
-import com.globant.samples.volley.data.model.Item;
+import com.globant.samples.volley.data.model.item.Item;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

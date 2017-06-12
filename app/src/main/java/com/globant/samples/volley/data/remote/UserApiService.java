@@ -1,6 +1,6 @@
 package com.globant.samples.volley.data.remote;
 
-import com.globant.samples.volley.data.model.GithubUser;
+import com.globant.samples.volley.data.model.user.GithubUser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

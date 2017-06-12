@@ -1,6 +1,7 @@
-package com.globant.samples.volley.ui.presenter;
+package com.globant.samples.volley.ui.presenter.base;
 
 
+import com.globant.samples.volley.ui.presenter.Presenter;
 import com.globant.samples.volley.ui.view.MvpView;
 
 /**

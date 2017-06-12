@@ -1,18 +1,13 @@
-package com.globant.samples.volley.ui.activities;
+package com.globant.samples.volley.ui.activities.details;
 
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.globant.samples.volley.R;
-import com.globant.samples.volley.data.model.Item;
+import com.globant.samples.volley.data.model.item.Item;
+import com.globant.samples.volley.ui.activities.base.BaseActivity;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

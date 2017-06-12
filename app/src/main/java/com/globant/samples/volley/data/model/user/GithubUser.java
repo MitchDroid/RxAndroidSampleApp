@@ -1,10 +1,12 @@
-package com.globant.samples.volley.data.model;
+package com.globant.samples.volley.data.model.user;
 
 /**
  * Created by miller.barrera on 5/06/2017.
  */
 
 import java.util.List;
+
+import com.globant.samples.volley.data.model.item.Item;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

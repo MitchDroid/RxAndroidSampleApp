@@ -1,4 +1,4 @@
-package com.globant.samples.volley.ui.activities;
+package com.globant.samples.volley.ui.activities.base;
 
 import android.content.Intent;
 import android.os.Bundle;

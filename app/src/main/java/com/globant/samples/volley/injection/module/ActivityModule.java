@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.globant.samples.volley.injection.qualifier.ActivityContext;
-import com.globant.samples.volley.ui.adapters.GitHubUsersAdapter;
+import com.globant.samples.volley.ui.adapters.user.GitHubUsersAdapter;
 
 import dagger.Module;
 import dagger.Provides;

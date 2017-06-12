@@ -1,6 +1,7 @@
-package com.globant.samples.volley.ui.view;
+package com.globant.samples.volley.ui.view.user;
 
-import com.globant.samples.volley.data.model.Item;
+import com.globant.samples.volley.data.model.item.Item;
+import com.globant.samples.volley.ui.view.MvpView;
 
 import java.util.List;
 
