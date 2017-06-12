@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.globant.samples.volley.injection.qualifier.ActivityContext;
-import com.globant.samples.volley.ui.adapters.user.GitHubUsersAdapter;
+import com.globant.samples.volley.ui.userList.GitHubUsersListAdapter;
 
 import dagger.Module;
 import dagger.Provides;
@@ -36,8 +36,8 @@ public class ActivityModule {
     //Inject adapters
 
     @Provides
-    GitHubUsersAdapter gitHubUsersAdapter() {
-        return new GitHubUsersAdapter(mActivity);
+    GitHubUsersListAdapter gitHubUsersAdapter() {
+        return new GitHubUsersListAdapter(mActivity);
     }
 
 }

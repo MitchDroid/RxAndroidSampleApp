@@ -1,4 +1,4 @@
-package com.globant.samples.volley.ui.presenter.user;
+package com.globant.samples.volley.ui.userList;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyLog;
@@ -7,49 +7,39 @@ import com.globant.samples.volley.ApplicationController;
 import com.globant.samples.volley.data.model.user.GithubUser;
 import com.globant.samples.volley.data.remote.ApiConstants;
 import com.globant.samples.volley.data.remote.DataManager;
-import com.globant.samples.volley.ui.presenter.base.BasePresenter;
-import com.globant.samples.volley.ui.view.user.UserView;
+import com.globant.samples.volley.ui.base.BasePresenter;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 /**
  * Created by miller.barrera on 7/06/2017.
  */
 
-public class UserPresenter extends BasePresenter<UserView> {
+public class UsersListPresenter extends BasePresenter<UserListView> {
 
-    CompositeSubscription mCompositeSubscription;
     private final DataManager mDataManager;
 
     @Inject
-    public UserPresenter(DataManager dataManager) {
+    public UsersListPresenter(DataManager dataManager) {
         this.mDataManager = dataManager;
     }
 
     @Override
-    public void attachView(UserView mvpView) {
+    public void attachView(UserListView mvpView) {
         super.attachView(mvpView);
-
-        if (mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) {
-            mCompositeSubscription = new CompositeSubscription();
-        }
     }
 
     @Override
     public void detachView() {
         super.detachView();
-        if (mCompositeSubscription != null) {
-            mCompositeSubscription.clear();
-        }
     }
 
     /*Unused
@@ -78,11 +68,15 @@ public class UserPresenter extends BasePresenter<UserView> {
         ApplicationController.getInstance().addToRequestQueue(req);
     }
 
-    /*Unused
-    This method implements Retrofit Library using RxAndroid*/
-    public void doActionGithubUser() {
+
+    /**
+     * This method implements Retrofit Library using RxAndroid
+     * The Composite Subscription is handle
+     * directly into Activity
+     */
+    public Subscription doActionGithubUser() {
         checkViewAttached();
-        mCompositeSubscription.add(mDataManager.getGithubUsers().filter(githubUser -> githubUser != null)
+        return mDataManager.getGithubUsers().filter(githubUser -> githubUser != null)
                 .observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
                 .subscribe(githubUser -> {
                     if (githubUser != null) {
@@ -90,16 +84,7 @@ public class UserPresenter extends BasePresenter<UserView> {
                         getMvpView().getGithubUsers(githubUser.getItems());
                     }
 
-                }, throwable -> getMvpView().showError(throwable.getMessage(), ApiConstants.LOW_ERROR)));
-    }
-
-    /**
-     * This method returns the data Manager
-     * Observable to be subscribe - Unsubscribe
-     * directly into Activity
-     */
-    public Observable<GithubUser> doAction() {
-        return mDataManager.getGithubUsers();
+                }, throwable -> getMvpView().showError(throwable.getMessage(), ApiConstants.LOW_ERROR));
     }
 
 }

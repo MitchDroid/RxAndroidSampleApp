@@ -1,4 +1,4 @@
-package com.globant.samples.volley.ui.adapters.user;
+package com.globant.samples.volley.ui.userList;
 
 import android.content.Context;
 import android.support.v7.widget.CardView;
@@ -25,14 +25,14 @@ import butterknife.ButterKnife;
  * Created by miller.barrera on 5/06/2017.
  */
 
-public class GitHubUsersAdapter extends RecyclerView.Adapter<GitHubUsersAdapter.GitHubUsersAdapterViewHolder> {
+public class GitHubUsersListAdapter extends RecyclerView.Adapter<GitHubUsersListAdapter.GitHubUsersAdapterViewHolder> {
 
     private List<Item> mList;
     private Context mContext;
     OnItemClickListener mItemClickListener;
 
     @Inject
-    public GitHubUsersAdapter(Context context) {
+    public GitHubUsersListAdapter(Context context) {
         this.mList = new ArrayList<>();
         this.mContext = context;
     }

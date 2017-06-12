@@ -1,4 +1,4 @@
-package com.globant.samples.volley.ui.view;
+package com.globant.samples.volley.ui.base;
 
 
 import com.globant.samples.volley.data.remote.ApiConstants;

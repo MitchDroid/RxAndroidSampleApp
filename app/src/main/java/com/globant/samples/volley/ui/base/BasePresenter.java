@@ -1,8 +1,5 @@
-package com.globant.samples.volley.ui.presenter.base;
+package com.globant.samples.volley.ui.base;
 
-
-import com.globant.samples.volley.ui.presenter.Presenter;
-import com.globant.samples.volley.ui.view.MvpView;
 
 /**
  * Base class that implements the Presenter interface and provide a base implementation for

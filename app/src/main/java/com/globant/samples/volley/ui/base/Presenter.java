@@ -1,7 +1,5 @@
-package com.globant.samples.volley.ui.presenter;
+package com.globant.samples.volley.ui.base;
 
-
-import com.globant.samples.volley.ui.view.MvpView;
 
 /**
  * Every presenter in the app must either implement this interface or extend BasePresenter

@@ -1,19 +1,18 @@
-package com.globant.samples.volley.ui.activities.user;
+package com.globant.samples.volley.ui.userList;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.globant.samples.volley.ApplicationController;
 import com.globant.samples.volley.R;
 import com.globant.samples.volley.data.model.item.Item;
 import com.globant.samples.volley.data.remote.ApiConstants;
-import com.globant.samples.volley.ui.activities.details.UserDetailActivity;
-import com.globant.samples.volley.ui.activities.base.BaseActivity;
-import com.globant.samples.volley.ui.adapters.user.GitHubUsersAdapter;
-import com.globant.samples.volley.ui.presenter.user.UserPresenter;
-import com.globant.samples.volley.ui.view.user.UserView;
+import com.globant.samples.volley.ui.base.BaseActivity;
+import com.globant.samples.volley.ui.userDetails.UserDetailActivity;
 
 import java.util.List;
 
@@ -21,21 +20,19 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-public class GithubUserActivity extends BaseActivity implements UserView {
+public class GithubUserListActivity extends BaseActivity implements UserListView {
 
 
     CompositeSubscription mCompositeSubscription;
 
     @Inject
-    UserPresenter mUserPresenter;
+    UsersListPresenter mUsersListPresenter;
 
     @Inject
-    GitHubUsersAdapter mGitHubUsersAdapter;
+    GitHubUsersListAdapter mGitHubUsersListAdapter;
 
 
     @BindView(R.id.recycler_view)
@@ -48,15 +45,14 @@ public class GithubUserActivity extends BaseActivity implements UserView {
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
 
-        mRecyclerView.setAdapter(mGitHubUsersAdapter);
+        mRecyclerView.setAdapter(mGitHubUsersListAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-       // mUserPresenter.attachView(this);
-
-        mGitHubUsersAdapter.setOnItemClickListener((view, position) -> {
+        mUsersListPresenter.attachView(this);
+        
+        mGitHubUsersListAdapter.setOnItemClickListener((view, position) -> {
             Timber.d("Position %s ", position);
             Bundle bundle = new Bundle();
-            bundle.putParcelable("user_item", mGitHubUsersAdapter.get(position));
+            bundle.putParcelable("user_item", mGitHubUsersListAdapter.get(position));
 
             Intent intent = new Intent(this, UserDetailActivity.class);
             intent.putExtras(bundle);
@@ -64,15 +60,14 @@ public class GithubUserActivity extends BaseActivity implements UserView {
             callActivity(intent);
         });
 
-        //fetchJSONVolleyResponse();
-        attachSubscription();
+        attachCompositeSubscription();
         fetchJSONRetrofitResponse();
     }
 
 
     @Deprecated
     private void fetchJSONVolleyResponse() {
-        mUserPresenter.getGithubUsers();
+        mUsersListPresenter.getGithubUsers();
     }
 
     /**
@@ -80,15 +75,7 @@ public class GithubUserActivity extends BaseActivity implements UserView {
      * order to be handle and subscribe to the Activity
      */
     private void fetchJSONRetrofitResponse() {
-        mCompositeSubscription.add(mUserPresenter.doAction().filter(githubUser -> githubUser != null)
-                .observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
-                .subscribe(githubUser -> {
-                    if (githubUser != null) {
-                        Timber.d("GITHUB USERS SIZE %s ", githubUser.getItems().size());
-                        mGitHubUsersAdapter.populateUsersList(githubUser.getItems());
-                    }
-
-                }, throwable -> showError(throwable.getMessage(), ApiConstants.LOW_ERROR)));
+        mCompositeSubscription.add(mUsersListPresenter.doActionGithubUser());
     }
 
     @Override
@@ -99,7 +86,7 @@ public class GithubUserActivity extends BaseActivity implements UserView {
         }
     }
 
-    public void attachSubscription() {
+    public void attachCompositeSubscription() {
         if (mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) {
             mCompositeSubscription = new CompositeSubscription();
         }
@@ -108,7 +95,7 @@ public class GithubUserActivity extends BaseActivity implements UserView {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        mUserPresenter.detachView();
+        mUsersListPresenter.detachView();
         if (mCompositeSubscription != null) {
             mCompositeSubscription.clear();
         }
@@ -118,16 +105,17 @@ public class GithubUserActivity extends BaseActivity implements UserView {
 
     @Override
     public void getGithubUsers(List<Item> items) {
-        mGitHubUsersAdapter.populateUsersList(items);
+        mGitHubUsersListAdapter.populateUsersList(items);
     }
 
     @Override
     public void showError(String message, @ApiConstants.ErrorType int errorType) {
         Timber.d("Github API Service error %s ", message);
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void showRefresh(boolean show) {
-
+        //TODO Implements progress bar
     }
 }

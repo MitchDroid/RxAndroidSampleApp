@@ -1,4 +1,4 @@
-package com.globant.samples.volley.ui.activities.details;
+package com.globant.samples.volley.ui.userDetails;
 
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import com.globant.samples.volley.R;
 import com.globant.samples.volley.data.model.item.Item;
-import com.globant.samples.volley.ui.activities.base.BaseActivity;
+import com.globant.samples.volley.ui.base.BaseActivity;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
