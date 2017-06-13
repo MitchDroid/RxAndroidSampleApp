@@ -34,7 +34,6 @@ public class GithubUserListActivity extends BaseActivity implements UserListView
     @Inject
     GitHubUsersListAdapter mGitHubUsersListAdapter;
 
-    @Inject
     Realm mRealm;
 
     @BindView(R.id.recycler_view)
@@ -46,7 +45,7 @@ public class GithubUserListActivity extends BaseActivity implements UserListView
         setContentView(R.layout.activity_main);
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
-
+        String asd = "" + mRealm;
         mRecyclerView.setAdapter(mGitHubUsersListAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mUsersListPresenter.attachView(this);

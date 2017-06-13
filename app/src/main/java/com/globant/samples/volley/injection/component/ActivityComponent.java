@@ -10,6 +10,8 @@ import com.globant.samples.volley.ui.userDetails.UserDetailActivity;
 import com.globant.samples.volley.ui.userList.GithubUserListActivity;
 
 import dagger.Component;
+import dagger.Provides;
+import io.realm.Realm;
 
 /**
  * Created by miller.barrera on 14/10/2016.
@@ -30,4 +32,5 @@ public interface ActivityComponent {
 
     @ActivityContext
     Context context();
+
 }

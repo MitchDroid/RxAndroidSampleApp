@@ -10,6 +10,8 @@ import com.globant.samples.volley.data.model.item.Item;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+
 public class GithubUser {
 
     @SerializedName("total_count")

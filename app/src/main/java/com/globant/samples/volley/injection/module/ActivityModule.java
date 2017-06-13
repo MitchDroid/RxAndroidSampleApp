@@ -35,11 +35,6 @@ public class ActivityModule {
         return mActivity;
     }
 
-    @Singleton
-    @Provides
-    Realm provideRealmDefaultInstance() {
-        return Realm.getDefaultInstance();
-    }
 
     //Inject adapters
 

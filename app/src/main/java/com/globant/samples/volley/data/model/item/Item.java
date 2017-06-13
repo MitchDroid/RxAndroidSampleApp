@@ -10,7 +10,11 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Item implements Parcelable{
+import io.realm.RealmObject;
+import io.realm.annotations.RealmClass;
+
+@RealmClass
+public class Item extends RealmObject implements Parcelable {
 
     @SerializedName("login")
     @Expose
@@ -83,6 +87,9 @@ public class Item implements Parcelable{
         eventsUrl = in.readString();
         receivedEventsUrl = in.readString();
         type = in.readString();
+    }
+
+    public Item() {
     }
 
     public static final Creator<Item> CREATOR = new Creator<Item>() {
