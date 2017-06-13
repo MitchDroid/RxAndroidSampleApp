@@ -2,7 +2,6 @@ package com.globant.samples.volley.ui.userList;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
@@ -20,6 +19,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.Realm;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -34,6 +34,8 @@ public class GithubUserListActivity extends BaseActivity implements UserListView
     @Inject
     GitHubUsersListAdapter mGitHubUsersListAdapter;
 
+    @Inject
+    Realm mRealm;
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
@@ -48,7 +50,7 @@ public class GithubUserListActivity extends BaseActivity implements UserListView
         mRecyclerView.setAdapter(mGitHubUsersListAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mUsersListPresenter.attachView(this);
-        
+
         mGitHubUsersListAdapter.setOnItemClickListener((view, position) -> {
             Timber.d("Position %s ", position);
             Bundle bundle = new Bundle();
@@ -99,9 +101,9 @@ public class GithubUserListActivity extends BaseActivity implements UserListView
         if (mCompositeSubscription != null) {
             mCompositeSubscription.clear();
         }
+        mRealm.close();
 
     }
-
 
     @Override
     public void getGithubUsers(List<Item> items) {

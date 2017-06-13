@@ -18,8 +18,7 @@ import rx.Observable;
 public interface UserApiService {
 
     @GET(ApiConstants.BASE_URL_USERS)
-    Observable<GithubUser> doGuestUserAuth();
-
+    Observable<GithubUser> doGetUsers();
 
     class Factory {
         public static UserApiService create() {

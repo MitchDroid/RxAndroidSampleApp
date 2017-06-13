@@ -35,6 +35,6 @@ public class DataManager {
 
     public Observable<GithubUser> getGithubUsers() {
         Timber.d("USERS URL %s ", ApiConstants.BASE_URL_USERS);
-        return mUserTokenApiService.doGuestUserAuth();
+        return mUserTokenApiService.doGetUsers();
     }
 }

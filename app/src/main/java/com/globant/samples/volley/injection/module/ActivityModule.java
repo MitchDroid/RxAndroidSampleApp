@@ -6,8 +6,11 @@ import android.content.Context;
 import com.globant.samples.volley.injection.qualifier.ActivityContext;
 import com.globant.samples.volley.ui.userList.GitHubUsersListAdapter;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
+import io.realm.Realm;
 
 /**
  * Created by miller.barrera
@@ -16,7 +19,6 @@ import dagger.Provides;
 public class ActivityModule {
 
     private Activity mActivity;
-
 
     public ActivityModule(Activity activity) {
         this.mActivity = activity;
@@ -31,6 +33,12 @@ public class ActivityModule {
     @ActivityContext
     Context provideContext() {
         return mActivity;
+    }
+
+    @Singleton
+    @Provides
+    Realm provideRealmDefaultInstance() {
+        return Realm.getDefaultInstance();
     }
 
     //Inject adapters

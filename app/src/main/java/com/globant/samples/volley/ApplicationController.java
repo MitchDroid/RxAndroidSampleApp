@@ -15,6 +15,7 @@ import com.globant.samples.volley.injection.component.DaggerApplicationComponent
 import com.globant.samples.volley.injection.module.ApplicationModule;
 import com.globant.samples.volley.injection.module.NetworkModule;
 
+import io.realm.Realm;
 import timber.log.Timber;
 
 /**
@@ -48,6 +49,7 @@ public class ApplicationController extends Application {
 
         // initialize the singleton
         sInstance = this;
+        Realm.init(this);
     }
 
     /**
@@ -109,6 +111,7 @@ public class ApplicationController extends Application {
             mRequestQueue.cancelAll(tag);
         }
     }
+
     /**
      * To get Context
      *
