@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
-import com.globant.samples.volley.ApplicationController;
 import com.globant.samples.volley.R;
 import com.globant.samples.volley.data.model.item.Item;
 import com.globant.samples.volley.data.remote.ApiConstants;
@@ -20,9 +19,11 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.realm.Realm;
-import io.realm.RealmResults;
 import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -32,7 +33,7 @@ public class GithubUserListActivity extends BaseActivity implements UserListView
     CompositeSubscription mCompositeSubscription;
 
     @Inject
-    UsersListPresenter mUsersListPresenter;
+    UsersListViewModel mUsersListViewModel;
 
     @Inject
     GitHubUsersListAdapter mGitHubUsersListAdapter;
@@ -43,6 +44,8 @@ public class GithubUserListActivity extends BaseActivity implements UserListView
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
+    private static final String USER_ITEM_KEY = "user_item";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,12 +55,12 @@ public class GithubUserListActivity extends BaseActivity implements UserListView
 
         mRecyclerView.setAdapter(mGitHubUsersListAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mUsersListPresenter.attachView(this);
+
 
         mGitHubUsersListAdapter.setOnItemClickListener((view, position) -> {
             Timber.d("Position %s ", position);
             Bundle bundle = new Bundle();
-            bundle.putParcelable("user_item", mGitHubUsersListAdapter.get(position));
+            bundle.putParcelable(USER_ITEM_KEY, mGitHubUsersListAdapter.get(position));
 
             Intent intent = new Intent(this, UserDetailActivity.class);
             intent.putExtras(bundle);
@@ -66,32 +69,42 @@ public class GithubUserListActivity extends BaseActivity implements UserListView
         });
 
         attachCompositeSubscription();
-
-        Observable<RealmResults<Item>> observable = userRepository.getUser();
-        Observable<Boolean> emptyList = observable.map(items -> items.isLoaded());
-
-        mCompositeSubscription.add(emptyList.map(aBoolean -> aBoolean).subscribe(aBoolean -> {
-            if(aBoolean){
-                fetchJSONRetrofitResponse();
-            }
-        }));
-
-
+        getUsersFromServer();
 
     }
-
 
     /**
      * Get response from Github API service in
      * order to be handle and subscribe to the Activity
      */
     private void fetchJSONRetrofitResponse() {
-        mCompositeSubscription.add(mUsersListPresenter.doActionGithubUser());
+        mCompositeSubscription.add(mUsersListViewModel.doActionGithubUser().subscribe(githubUser -> {
+            if (githubUser != null) {
+                Timber.d("GITHUB USERS SIZE %s ", githubUser.getItems().size());
+                getGithubUsers(githubUser.getItems());
+            }
+
+        }, throwable -> showError(throwable.getMessage(), ApiConstants.LOW_ERROR)));
+    }
+
+    private void getUsersFromServer() {
+        mCompositeSubscription.add(userRepository.getUsers().subscribe(items -> {
+            if (items != null) {
+                Timber.d("GITHUB USERS SIZE %s ", items.size());
+                getGithubUsers(items);
+
+            }
+        }, throwable -> showError(throwable.getMessage(), ApiConstants.LOW_ERROR)));
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
     public void attachCompositeSubscription() {
@@ -103,11 +116,9 @@ public class GithubUserListActivity extends BaseActivity implements UserListView
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mUsersListPresenter.detachView();
         if (mCompositeSubscription != null) {
             mCompositeSubscription.clear();
         }
-        userRepository.getRealmDefaultInstance().close();
 
     }
 

@@ -28,6 +28,8 @@ public class UserDetailActivity extends BaseActivity {
     @BindView(R.id.tv_github_user_repositories)
     TextView mUserRepositories;
 
+    private static final String USER_ITEM_KEY = "user_item";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +46,7 @@ public class UserDetailActivity extends BaseActivity {
         Bundle b = this.getIntent().getExtras();
 
         if (b != null) {
-            mItem = b.getParcelable("user_item");
+            mItem = b.getParcelable(USER_ITEM_KEY);
 
             setImage(mItem.getAvatarUrl());
             mUserName.setText(mItem.getLogin());
@@ -54,7 +56,7 @@ public class UserDetailActivity extends BaseActivity {
         }
     }
 
-    public void setImage(String url){
+    public void setImage(String url) {
         Picasso.with(this).load(url).fit().into(mImage);
     }
 }

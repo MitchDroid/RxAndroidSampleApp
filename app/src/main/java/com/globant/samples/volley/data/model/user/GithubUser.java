@@ -13,7 +13,7 @@ import com.google.gson.annotations.SerializedName;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 
-public class GithubUser extends RealmObject {
+public class GithubUser {
 
     @SerializedName("total_count")
     @Expose
@@ -23,7 +23,7 @@ public class GithubUser extends RealmObject {
     private Boolean incompleteResults;
     @SerializedName("items")
     @Expose
-    private RealmList<Item> items = null;
+    private List<Item> items = null;
 
     public Integer getTotalCount() {
         return totalCount;
@@ -41,11 +41,11 @@ public class GithubUser extends RealmObject {
         this.incompleteResults = incompleteResults;
     }
 
-    public RealmList<Item> getItems() {
+    public List<Item> getItems() {
         return items;
     }
 
-    public void setItems(RealmList<Item> items) {
+    public void setItems(List<Item> items) {
         this.items = items;
     }
 }
