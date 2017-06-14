@@ -10,9 +10,10 @@ import com.globant.samples.volley.data.model.item.Item;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 
-public class GithubUser {
+public class GithubUser extends RealmObject {
 
     @SerializedName("total_count")
     @Expose
@@ -22,7 +23,7 @@ public class GithubUser {
     private Boolean incompleteResults;
     @SerializedName("items")
     @Expose
-    private List<Item> items = null;
+    private RealmList<Item> items = null;
 
     public Integer getTotalCount() {
         return totalCount;
@@ -40,12 +41,11 @@ public class GithubUser {
         this.incompleteResults = incompleteResults;
     }
 
-    public List<Item> getItems() {
+    public RealmList<Item> getItems() {
         return items;
     }
 
-    public void setItems(List<Item> items) {
+    public void setItems(RealmList<Item> items) {
         this.items = items;
     }
-
 }

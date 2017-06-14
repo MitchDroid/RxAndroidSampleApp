@@ -10,6 +10,7 @@ import com.globant.samples.volley.ApplicationController;
 import com.globant.samples.volley.R;
 import com.globant.samples.volley.data.model.item.Item;
 import com.globant.samples.volley.data.remote.ApiConstants;
+import com.globant.samples.volley.data.repository.UserRepository;
 import com.globant.samples.volley.ui.base.BaseActivity;
 import com.globant.samples.volley.ui.userDetails.UserDetailActivity;
 
@@ -20,6 +21,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
+import io.realm.RealmResults;
+import rx.Observable;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
@@ -34,7 +37,8 @@ public class GithubUserListActivity extends BaseActivity implements UserListView
     @Inject
     GitHubUsersListAdapter mGitHubUsersListAdapter;
 
-    Realm mRealm;
+    @Inject
+    UserRepository userRepository;
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
@@ -45,7 +49,7 @@ public class GithubUserListActivity extends BaseActivity implements UserListView
         setContentView(R.layout.activity_main);
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
-        String asd = "" + mRealm;
+
         mRecyclerView.setAdapter(mGitHubUsersListAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mUsersListPresenter.attachView(this);
@@ -62,14 +66,20 @@ public class GithubUserListActivity extends BaseActivity implements UserListView
         });
 
         attachCompositeSubscription();
-        fetchJSONRetrofitResponse();
-    }
+
+        Observable<RealmResults<Item>> observable = userRepository.getUser();
+        Observable<Boolean> emptyList = observable.map(items -> items.isLoaded());
+
+        mCompositeSubscription.add(emptyList.map(aBoolean -> aBoolean).subscribe(aBoolean -> {
+            if(aBoolean){
+                fetchJSONRetrofitResponse();
+            }
+        }));
 
 
-    @Deprecated
-    private void fetchJSONVolleyResponse() {
-        mUsersListPresenter.getGithubUsers();
+
     }
+
 
     /**
      * Get response from Github API service in
@@ -82,9 +92,6 @@ public class GithubUserListActivity extends BaseActivity implements UserListView
     @Override
     protected void onStop() {
         super.onStop();
-        if (ApplicationController.getInstance() != null) {
-            ApplicationController.getInstance().cancelPendingRequests(this.getLocalClassName());
-        }
     }
 
     public void attachCompositeSubscription() {
@@ -100,7 +107,7 @@ public class GithubUserListActivity extends BaseActivity implements UserListView
         if (mCompositeSubscription != null) {
             mCompositeSubscription.clear();
         }
-        mRealm.close();
+        userRepository.getRealmDefaultInstance().close();
 
     }
 
