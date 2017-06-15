@@ -31,27 +31,36 @@ public class UserRepository {
      * Get user from  Realm database.
      **/
     public Observable<List<Item>> getUsers() {
-        Realm realm = Realm.getDefaultInstance();
-        // Load all persons and merge them with their latest stats from GitHub (if they have any)
-        return realm.where(Item.class).isNotNull("login")
-                .findAllSorted("login").asObservable().flatMap(items -> {
-                    if (!items.isEmpty()) {
-                        return Observable.just(items);
+        return Observable.defer(() -> {
+            Realm realm = Realm.getDefaultInstance();
+            // Load all persons and merge them with their latest stats from GitHub (if they have any)
+            return realm.where(Item.class).isNotNull("login")
+                    .findAllSorted("login").asObservable().flatMap(items -> {
+                        if (!items.isEmpty()) {
+                            return Observable.just(realm.copyFromRealm(items));
 
-                    } else {
-                        return getUserFromServer();
-                    }
-                }).doOnUnsubscribe(() -> realm.close());
+                        } else {
+                            return getUserFromServer();
+                        }
+                    }).doOnUnsubscribe(() -> realm.close());
+        });
+
     }
 
 
-    /**Retrive data from server and save it using Realm
-     * @return Observable list items*/
+    /**
+     * Retrive data from server and save it using Realm
+     *
+     * @return Observable list items
+     */
     private Observable<List<Item>> getUserFromServer() {
         Realm realm = Realm.getDefaultInstance();
         return mDataManager.getGithubUsers().filter(githubUser -> githubUser != null)
-                .map(githubUser -> githubUser.getItems()) .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .doOnNext(items -> realm.executeTransaction(realm1 -> realm1.insertOrUpdate(items)));
+                .map(githubUser -> githubUser.getItems())
+                .doOnNext(items -> realm.executeTransaction(realm1 -> {
+                    realm1.insertOrUpdate(items);
+                    realm1.close();
+
+                }));
     }
 }

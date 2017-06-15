@@ -69,7 +69,7 @@ public class GithubUserListActivity extends BaseActivity implements UserListView
         });
 
         attachCompositeSubscription();
-        getUsersFromServer();
+        fetchJSONRetrofitResponse();
 
     }
 
@@ -78,22 +78,12 @@ public class GithubUserListActivity extends BaseActivity implements UserListView
      * order to be handle and subscribe to the Activity
      */
     private void fetchJSONRetrofitResponse() {
-        mCompositeSubscription.add(mUsersListViewModel.doActionGithubUser().subscribe(githubUser -> {
-            if (githubUser != null) {
-                Timber.d("GITHUB USERS SIZE %s ", githubUser.getItems().size());
-                getGithubUsers(githubUser.getItems());
-            }
-
-        }, throwable -> showError(throwable.getMessage(), ApiConstants.LOW_ERROR)));
-    }
-
-    private void getUsersFromServer() {
-        mCompositeSubscription.add(userRepository.getUsers().subscribe(items -> {
+        mCompositeSubscription.add(mUsersListViewModel.doActionGithubUser().subscribe(items -> {
             if (items != null) {
                 Timber.d("GITHUB USERS SIZE %s ", items.size());
                 getGithubUsers(items);
-
             }
+
         }, throwable -> showError(throwable.getMessage(), ApiConstants.LOW_ERROR)));
     }
 
