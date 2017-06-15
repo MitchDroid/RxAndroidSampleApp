@@ -10,8 +10,6 @@ import javax.inject.Singleton;
 
 import io.realm.Realm;
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by miller.barrera on 13/06/2017.

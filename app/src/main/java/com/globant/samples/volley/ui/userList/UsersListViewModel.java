@@ -3,8 +3,6 @@ package com.globant.samples.volley.ui.userList;
 import android.os.HandlerThread;
 
 import com.globant.samples.volley.data.model.item.Item;
-import com.globant.samples.volley.data.model.user.GithubUser;
-import com.globant.samples.volley.data.remote.DataManager;
 import com.globant.samples.volley.data.repository.UserRepository;
 import com.globant.samples.volley.ui.base.BasePresenter;
 
@@ -15,7 +13,6 @@ import javax.inject.Inject;
 import rx.Observable;
 import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by miller.barrera on 7/06/2017.
@@ -26,7 +23,6 @@ public class UsersListViewModel extends BasePresenter<UserListView> {
     private final UserRepository mUserRepository;
     private Scheduler scheduler;
     private HandlerThread handlerThread;
-    private AndroidSchedulers androidSchedulers;
 
 
     @Inject
