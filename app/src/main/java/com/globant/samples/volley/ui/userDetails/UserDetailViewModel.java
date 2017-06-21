@@ -1,19 +1,15 @@
 package com.globant.samples.volley.ui.userDetails;
 
-import android.os.HandlerThread;
-
-import com.globant.samples.volley.data.model.item.Item;
 import com.globant.samples.volley.data.model.repository.GithubUserRepo;
-import com.globant.samples.volley.data.remote.sqlite.room.DatabaseCreator;
-import com.globant.samples.volley.data.repository.UserRepository;
+import com.globant.samples.volley.data.repository.UserRepositoryRepository;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
 import rx.Observable;
-import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by miller.barrera on 20/06/2017.
@@ -21,16 +17,11 @@ import rx.android.schedulers.AndroidSchedulers;
 
 public class UserDetailViewModel {
 
-    private final UserRepository mUserRepository;
-    private Scheduler scheduler;
-    private HandlerThread handlerThread;
+    private final UserRepositoryRepository mUserRepository;
 
     @Inject
-    public UserDetailViewModel(UserRepository mUserRepository) {
+    public UserDetailViewModel(UserRepositoryRepository mUserRepository) {
         this.mUserRepository = mUserRepository;
-        handlerThread = new HandlerThread("backgroundThread");
-        handlerThread.start();
-        scheduler = AndroidSchedulers.from(handlerThread.getLooper());
     }
 
     /**
@@ -39,9 +30,9 @@ public class UserDetailViewModel {
      * directly into Activity
      */
     public Observable<List<GithubUserRepo>> doActionGithubUserRepos(String gitHubUserName) {
-        return mUserRepository.getPublicRepositories(gitHubUserName).filter(items -> items != null)
-                .observeOn(AndroidSchedulers.mainThread()).subscribeOn(scheduler)
-                .unsubscribeOn(scheduler);
+        return mUserRepository.getRepositories(gitHubUserName).filter(items -> items != null)
+                .observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io());
     }
 
 

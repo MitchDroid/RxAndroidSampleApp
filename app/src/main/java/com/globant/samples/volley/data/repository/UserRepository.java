@@ -77,16 +77,4 @@ public class UserRepository {
     }
 
 
-
-    public Observable<List<GithubUserRepo>> getPublicRepositories(String githubUserName) {
-        return mDataManager.getGithubUserRepos(githubUserName).filter(githubUserRepo -> githubUserRepo != null)
-                .doOnNext(githubUserRepo -> {
-                    //TODO save into SQLite
-                    Timber.d("REPOS SIZE %s", githubUserRepo.size());
-                    mDatabaseCreator.createDb(mContext);
-                    mDatabaseCreator.insertData(githubUserRepo);
-
-                });
-
-    }
 }

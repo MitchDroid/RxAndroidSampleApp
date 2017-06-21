@@ -27,8 +27,6 @@ public class UserDetailActivity extends BaseActivity {
     @Inject
     UserDetailViewModel mUserDetailViewModel;
 
-
-
     @BindView(R.id.user_image)
     ImageView mImage;
 

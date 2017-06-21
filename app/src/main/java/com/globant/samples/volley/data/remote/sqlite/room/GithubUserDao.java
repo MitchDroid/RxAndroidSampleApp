@@ -21,7 +21,7 @@ import rx.Observable;
 public interface GithubUserDao {
 
     @Query("SELECT * FROM repository")
-    public Observable<List<GithubUserRepo>> getAll();
+    Flowable<List<GithubUserRepo>> getAll();
 
     @Insert
     void insertAll(List<GithubUserRepo> products);

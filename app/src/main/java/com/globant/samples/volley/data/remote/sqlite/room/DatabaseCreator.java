@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reactivex.Flowable;
 import rx.Observable;
 
 import static com.globant.samples.volley.data.remote.sqlite.room.AppDatabase.DATABASE_NAME;
@@ -124,7 +125,7 @@ public class DatabaseCreator {
         mDb = db;
     }
 
-    public Observable<List<GithubUserRepo>> getUserReposList(){
+    public Flowable<List<GithubUserRepo>> getUserReposList(){
         // Build the database!
         AppDatabase db = Room.databaseBuilder(mContext.getApplicationContext(),
                 AppDatabase.class, DATABASE_NAME).build();
