@@ -1,22 +1,10 @@
-package com.globant.samples.volley.data.model.item;
 
-/**
- * Created by miller.barrera on 5/06/2017.
- */
-
-import android.arch.persistence.room.Entity;
-import android.os.Parcel;
-import android.os.Parcelable;
+package com.globant.samples.volley.data.model.repository;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
-import io.realm.annotations.RealmClass;
-
-@RealmClass
-public class Item extends RealmObject implements Parcelable {
+public class Owner {
 
     @SerializedName("login")
     @Expose
@@ -69,42 +57,6 @@ public class Item extends RealmObject implements Parcelable {
     @SerializedName("site_admin")
     @Expose
     private Boolean siteAdmin;
-    @SerializedName("score")
-    @Expose
-    private Double score;
-
-    protected Item(Parcel in) {
-        login = in.readString();
-        avatarUrl = in.readString();
-        gravatarId = in.readString();
-        url = in.readString();
-        htmlUrl = in.readString();
-        followersUrl = in.readString();
-        followingUrl = in.readString();
-        gistsUrl = in.readString();
-        starredUrl = in.readString();
-        subscriptionsUrl = in.readString();
-        organizationsUrl = in.readString();
-        reposUrl = in.readString();
-        eventsUrl = in.readString();
-        receivedEventsUrl = in.readString();
-        type = in.readString();
-    }
-
-    public Item() {
-    }
-
-    public static final Creator<Item> CREATOR = new Creator<Item>() {
-        @Override
-        public Item createFromParcel(Parcel in) {
-            return new Item(in);
-        }
-
-        @Override
-        public Item[] newArray(int size) {
-            return new Item[size];
-        }
-    };
 
     public String getLogin() {
         return login;
@@ -242,35 +194,4 @@ public class Item extends RealmObject implements Parcelable {
         this.siteAdmin = siteAdmin;
     }
 
-    public Double getScore() {
-        return score;
-    }
-
-    public void setScore(Double score) {
-        this.score = score;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(login);
-        parcel.writeString(avatarUrl);
-        parcel.writeString(gravatarId);
-        parcel.writeString(url);
-        parcel.writeString(htmlUrl);
-        parcel.writeString(followersUrl);
-        parcel.writeString(followingUrl);
-        parcel.writeString(gistsUrl);
-        parcel.writeString(starredUrl);
-        parcel.writeString(subscriptionsUrl);
-        parcel.writeString(organizationsUrl);
-        parcel.writeString(reposUrl);
-        parcel.writeString(eventsUrl);
-        parcel.writeString(receivedEventsUrl);
-        parcel.writeString(type);
-    }
 }

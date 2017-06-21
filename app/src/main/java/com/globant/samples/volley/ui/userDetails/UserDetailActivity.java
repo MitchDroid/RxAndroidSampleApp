@@ -3,18 +3,31 @@ package com.globant.samples.volley.ui.userDetails;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.globant.samples.volley.R;
 import com.globant.samples.volley.data.model.item.Item;
+import com.globant.samples.volley.data.remote.ApiConstants;
+import com.globant.samples.volley.data.remote.sqlite.room.DatabaseCreator;
 import com.globant.samples.volley.ui.base.BaseActivity;
 import com.squareup.picasso.Picasso;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 public class UserDetailActivity extends BaseActivity {
 
     private Item mItem;
+    CompositeSubscription mCompositeSubscription;
+
+    @Inject
+    UserDetailViewModel mUserDetailViewModel;
+
+
 
     @BindView(R.id.user_image)
     ImageView mImage;
@@ -54,9 +67,46 @@ public class UserDetailActivity extends BaseActivity {
             mUserRepositories.setText(mItem.getReposUrl());
 
         }
+
+        attachCompositeSubscription();
+        fetchJSONRetrofitResponse();
+    }
+
+
+    /**
+     * Get response from Github API service in
+     * order to be handle and subscribe to the Activity
+     */
+    private void fetchJSONRetrofitResponse() {
+        mCompositeSubscription.add(mUserDetailViewModel.doActionGithubUserRepos(mUserName.getText().toString()).subscribe(githubUserRepos -> {
+            if (githubUserRepos != null) {
+                Timber.d("GITHUB USERS SIZE %s ", githubUserRepos.size());
+            }
+
+        }, throwable -> showError(throwable.getMessage(), ApiConstants.LOW_ERROR)));
     }
 
     public void setImage(String url) {
         Picasso.with(this).load(url).fit().into(mImage);
+    }
+
+    public void attachCompositeSubscription() {
+        if (mCompositeSubscription == null || mCompositeSubscription.isUnsubscribed()) {
+            mCompositeSubscription = new CompositeSubscription();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mCompositeSubscription != null) {
+            mCompositeSubscription.clear();
+        }
+
+    }
+
+    public void showError(String message, @ApiConstants.ErrorType int errorType) {
+        Timber.d("Github API Service error %s ", message);
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }

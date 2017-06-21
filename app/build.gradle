@@ -13,7 +13,18 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation":
+                                     "$projectDir/schemas".toString()]
+            }
+        }
     }
+
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
+    
     buildTypes {
         release {
             minifyEnabled false
@@ -98,5 +109,18 @@ dependencies {
     compile "com.jakewharton.timber:timber:$TIMBER_VERSION"
 
     compile group: 'com.google.code.gson', name: 'gson', version: '2.3.1'
+
+    //SQLite - ROOM
+    // for Lifecycles, LiveData, and ViewModel, add:
+    compile "android.arch.lifecycle:runtime:1.0.0-alpha3"
+    compile "android.arch.lifecycle:extensions:1.0.0-alpha3"
+    annotationProcessor "android.arch.lifecycle:compiler:1.0.0-alpha3"
+
+    // for Room, add:
+    compile "android.arch.persistence.room:runtime:1.0.0-alpha3"
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0-alpha3"
+
+    // for Room RxJava support, add:
+    compile "android.arch.persistence.room:rxjava2:1.0.0-alpha3"
 
 }

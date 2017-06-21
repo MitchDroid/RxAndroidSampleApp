@@ -1,6 +1,10 @@
 package com.globant.samples.volley.data.remote;
 
+import com.globant.samples.volley.data.model.repository.GithubUserRepo;
 import com.globant.samples.volley.data.model.user.GithubUser;
+import com.globant.samples.volley.data.remote.sqlite.room.GithubUserDao;
+
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -36,5 +40,9 @@ public class DataManager {
     public Observable<GithubUser> getGithubUsers() {
         Timber.d("USERS URL %s ", ApiConstants.BASE_URL_USERS);
         return mUserTokenApiService.doGetUsers();
+    }
+
+    public Observable<List<GithubUserRepo>> getGithubUserRepos(String githubUserName) {
+        return mUserTokenApiService.doGetUserRepos(githubUserName);
     }
 }

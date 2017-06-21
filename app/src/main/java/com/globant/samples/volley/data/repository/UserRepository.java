@@ -1,7 +1,12 @@
 package com.globant.samples.volley.data.repository;
 
+import android.content.Context;
+
 import com.globant.samples.volley.data.model.item.Item;
+import com.globant.samples.volley.data.model.repository.GithubUserRepo;
 import com.globant.samples.volley.data.remote.DataManager;
+import com.globant.samples.volley.data.remote.sqlite.room.DatabaseCreator;
+import com.globant.samples.volley.injection.qualifier.ApplicationContext;
 
 import java.util.List;
 
@@ -10,6 +15,7 @@ import javax.inject.Singleton;
 
 import io.realm.Realm;
 import rx.Observable;
+import timber.log.Timber;
 
 /**
  * Created by miller.barrera on 13/06/2017.
@@ -19,6 +25,14 @@ import rx.Observable;
 public class UserRepository {
 
     private DataManager mDataManager;
+
+    @Inject
+    DatabaseCreator mDatabaseCreator;
+
+    @Inject
+    @ApplicationContext
+    Context mContext;
+
 
     @Inject
     public UserRepository(DataManager mDataManager) {
@@ -60,5 +74,19 @@ public class UserRepository {
                     realm1.close();
 
                 }));
+    }
+
+
+
+    public Observable<List<GithubUserRepo>> getPublicRepositories(String githubUserName) {
+        return mDataManager.getGithubUserRepos(githubUserName).filter(githubUserRepo -> githubUserRepo != null)
+                .doOnNext(githubUserRepo -> {
+                    //TODO save into SQLite
+                    Timber.d("REPOS SIZE %s", githubUserRepo.size());
+                    mDatabaseCreator.createDb(mContext);
+                    mDatabaseCreator.insertData(githubUserRepo);
+
+                });
+
     }
 }

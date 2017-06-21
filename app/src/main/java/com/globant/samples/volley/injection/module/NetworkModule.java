@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.globant.samples.volley.data.remote.UserApiService;
+import com.globant.samples.volley.data.remote.sqlite.room.GithubUserDao;
 
 import javax.inject.Singleton;
 
