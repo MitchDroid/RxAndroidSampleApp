@@ -1,7 +1,7 @@
 package com.globant.samples.volley.ui.userDetails;
 
 import com.globant.samples.volley.data.model.repository.GithubUserRepo;
-import com.globant.samples.volley.data.repository.UserRepositoryRepository;
+import com.globant.samples.volley.data.repository.UserReposRepository;
 
 import java.util.List;
 
@@ -17,10 +17,10 @@ import rx.schedulers.Schedulers;
 
 public class UserDetailViewModel {
 
-    private final UserRepositoryRepository mUserRepository;
+    private final UserReposRepository mUserRepository;
 
     @Inject
-    public UserDetailViewModel(UserRepositoryRepository mUserRepository) {
+    public UserDetailViewModel(UserReposRepository mUserRepository) {
         this.mUserRepository = mUserRepository;
     }
 

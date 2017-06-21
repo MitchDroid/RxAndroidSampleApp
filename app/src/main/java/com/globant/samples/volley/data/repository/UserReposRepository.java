@@ -11,7 +11,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Flowable;
 import rx.Observable;
 import timber.log.Timber;
 
@@ -19,7 +18,7 @@ import timber.log.Timber;
  * Created by miller.barrera on 21/06/2017.
  */
 
-public class UserRepositoryRepository {
+public class UserReposRepository {
 
     private DataManager mDataManager;
 
@@ -31,19 +30,19 @@ public class UserRepositoryRepository {
     Context mContext;
 
     @Inject
-    public UserRepositoryRepository(DataManager mDataManager) {
+    public UserReposRepository(DataManager mDataManager) {
         this.mDataManager = mDataManager;
     }
 
     public Observable<List<GithubUserRepo>> getRepositories(String githubUserName) {
         mDatabaseCreator.createDb(mContext);
-        return mDatabaseCreator.getUserReposList().flatMap(githubUserRepos -> {
+        return Observable.fromCallable(() -> mDatabaseCreator.getUserReposList()).flatMap(githubUserRepos -> {
             if (!githubUserRepos.isEmpty()) {
-               // return Observable.just(githubUserRepos);
+                return Observable.just(githubUserRepos);
             } else {
-               ///return getPublicRepositoriesFromServer(githubUserName);
+                return getPublicRepositoriesFromServer(githubUserName);
             }
-            return null;
+
         });
     }
 

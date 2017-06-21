@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.globant.samples.volley.injection.qualifier.ActivityContext;
+import com.globant.samples.volley.ui.userDetails.UserDetailReposAdapter;
 import com.globant.samples.volley.ui.userList.GitHubUsersListAdapter;
 
 import javax.inject.Singleton;
@@ -43,4 +44,8 @@ public class ActivityModule {
         return new GitHubUsersListAdapter(mActivity);
     }
 
+    @Provides
+    UserDetailReposAdapter userDetailReposAdapter() {
+        return new UserDetailReposAdapter(mActivity);
+    }
 }

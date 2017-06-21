@@ -1,16 +1,21 @@
 package com.globant.samples.volley.ui.userDetails;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.globant.samples.volley.R;
 import com.globant.samples.volley.data.model.item.Item;
+import com.globant.samples.volley.data.model.repository.GithubUserRepo;
 import com.globant.samples.volley.data.remote.ApiConstants;
 import com.globant.samples.volley.data.remote.sqlite.room.DatabaseCreator;
 import com.globant.samples.volley.ui.base.BaseActivity;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -27,6 +32,9 @@ public class UserDetailActivity extends BaseActivity {
     @Inject
     UserDetailViewModel mUserDetailViewModel;
 
+    @Inject
+    UserDetailReposAdapter mUserDetailReposAdapter;
+
     @BindView(R.id.user_image)
     ImageView mImage;
 
@@ -38,6 +46,9 @@ public class UserDetailActivity extends BaseActivity {
 
     @BindView(R.id.tv_github_user_repositories)
     TextView mUserRepositories;
+
+    @BindView(R.id.recycler_view)
+    RecyclerView mRecyclerView;
 
     private static final String USER_ITEM_KEY = "user_item";
 
@@ -66,6 +77,9 @@ public class UserDetailActivity extends BaseActivity {
 
         }
 
+        mRecyclerView.setAdapter(mUserDetailReposAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         attachCompositeSubscription();
         fetchJSONRetrofitResponse();
     }
@@ -79,9 +93,15 @@ public class UserDetailActivity extends BaseActivity {
         mCompositeSubscription.add(mUserDetailViewModel.doActionGithubUserRepos(mUserName.getText().toString()).subscribe(githubUserRepos -> {
             if (githubUserRepos != null) {
                 Timber.d("GITHUB USERS SIZE %s ", githubUserRepos.size());
+                populateRepostList(githubUserRepos);
             }
 
         }, throwable -> showError(throwable.getMessage(), ApiConstants.LOW_ERROR)));
+    }
+
+
+    public void populateRepostList(List<GithubUserRepo> listRepos) {
+        mUserDetailReposAdapter.populateReposList(listRepos);
     }
 
     public void setImage(String url) {

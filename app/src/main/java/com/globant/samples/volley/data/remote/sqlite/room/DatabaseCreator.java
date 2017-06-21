@@ -125,7 +125,7 @@ public class DatabaseCreator {
         mDb = db;
     }
 
-    public Flowable<List<GithubUserRepo>> getUserReposList(){
+    public List<GithubUserRepo> getUserReposList(){
         // Build the database!
         AppDatabase db = Room.databaseBuilder(mContext.getApplicationContext(),
                 AppDatabase.class, DATABASE_NAME).build();

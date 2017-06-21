@@ -5,13 +5,9 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
-import com.globant.samples.volley.data.model.item.Item;
 import com.globant.samples.volley.data.model.repository.GithubUserRepo;
 
 import java.util.List;
-
-import io.reactivex.Flowable;
-import rx.Observable;
 
 /**
  * Created by miller.barrera on 16/06/2017.
@@ -21,7 +17,7 @@ import rx.Observable;
 public interface GithubUserDao {
 
     @Query("SELECT * FROM repository")
-    Flowable<List<GithubUserRepo>> getAll();
+    List<GithubUserRepo> getAll();
 
     @Insert
     void insertAll(List<GithubUserRepo> products);
