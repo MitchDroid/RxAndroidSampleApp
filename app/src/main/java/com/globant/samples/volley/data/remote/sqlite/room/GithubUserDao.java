@@ -1,5 +1,6 @@
 package com.globant.samples.volley.data.remote.sqlite.room;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -18,6 +19,9 @@ public interface GithubUserDao {
 
     @Query("SELECT * FROM repository")
     List<GithubUserRepo> getAll();
+
+    @Query("SELECT * FROM repository where userName = :userName")
+    List<GithubUserRepo> getByUserName(String userName);
 
     @Insert
     void insertAll(List<GithubUserRepo> products);

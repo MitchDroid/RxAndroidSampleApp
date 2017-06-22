@@ -11,6 +11,9 @@ import com.google.gson.annotations.SerializedName;
 @Entity(tableName = "repository")
 public class GithubUserRepo {
 
+    @SerializedName("user_name")
+    @Expose
+    private String userName;
     @SerializedName("id")
     @Expose
     @PrimaryKey
@@ -222,6 +225,14 @@ public class GithubUserRepo {
     @SerializedName("default_branch")
     @Expose
     private String defaultBranch;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public Integer getId() {
         return id;

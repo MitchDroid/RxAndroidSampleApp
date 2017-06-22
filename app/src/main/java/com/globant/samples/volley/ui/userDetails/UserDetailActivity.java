@@ -79,6 +79,8 @@ public class UserDetailActivity extends BaseActivity {
 
         mRecyclerView.setAdapter(mUserDetailReposAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setNestedScrollingEnabled(false);
 
         attachCompositeSubscription();
         fetchJSONRetrofitResponse();

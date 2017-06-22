@@ -36,7 +36,7 @@ public class UserReposRepository {
 
     public Observable<List<GithubUserRepo>> getRepositories(String githubUserName) {
         mDatabaseCreator.createDb(mContext);
-        return Observable.fromCallable(() -> mDatabaseCreator.getUserReposList()).flatMap(githubUserRepos -> {
+        return Observable.fromCallable(() -> mDatabaseCreator.getReposListByUserName(githubUserName)).flatMap(githubUserRepos -> {
             if (!githubUserRepos.isEmpty()) {
                 return Observable.just(githubUserRepos);
             } else {
@@ -44,14 +44,19 @@ public class UserReposRepository {
             }
 
         });
+
     }
 
     private Observable<List<GithubUserRepo>> getPublicRepositoriesFromServer(String githubUserName) {
         return mDataManager.getGithubUserRepos(githubUserName).filter(githubUserRepo -> githubUserRepo != null)
                 .doOnNext(githubUserRepo -> {
-                    Timber.d("REPOS SIZE %s", githubUserRepo.size());
+                    Timber.d("REPOS SIZE %s", githubUserName);
+                    for (int i = 0; i < githubUserRepo.size(); i++) {
+                        githubUserRepo.get(i).setUserName(githubUserName);
+                    }
                     mDatabaseCreator.createDb(mContext);
                     mDatabaseCreator.insertData(githubUserRepo);
+                    mDatabaseCreator.getDatabase().close();
 
                 });
 

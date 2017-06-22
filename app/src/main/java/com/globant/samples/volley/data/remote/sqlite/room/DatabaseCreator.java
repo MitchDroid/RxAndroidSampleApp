@@ -21,9 +21,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import io.reactivex.Flowable;
-import rx.Observable;
-
 import static com.globant.samples.volley.data.remote.sqlite.room.AppDatabase.DATABASE_NAME;
 
 /**
@@ -110,7 +107,7 @@ public class DatabaseCreator {
         }
     }
 
-    public  void insertData(List<GithubUserRepo> products) {
+    public void insertData(List<GithubUserRepo> products) {
         // Build the database!
         AppDatabase db = Room.databaseBuilder(mContext.getApplicationContext(),
                 AppDatabase.class, DATABASE_NAME).build();
@@ -125,7 +122,7 @@ public class DatabaseCreator {
         mDb = db;
     }
 
-    public List<GithubUserRepo> getUserReposList(){
+    public List<GithubUserRepo> getAllUserReposList() {
         // Build the database!
         AppDatabase db = Room.databaseBuilder(mContext.getApplicationContext(),
                 AppDatabase.class, DATABASE_NAME).build();
@@ -141,5 +138,22 @@ public class DatabaseCreator {
 
         return db.userDao().getAll();
 
+    }
+
+    public List<GithubUserRepo> getReposListByUserName(String githubUserName) {
+        // Build the database!
+        AppDatabase db = Room.databaseBuilder(mContext.getApplicationContext(),
+                AppDatabase.class, DATABASE_NAME).build();
+        db.beginTransaction();
+        try {
+
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+
+        mDb = db;
+
+        return db.userDao().getByUserName(githubUserName);
     }
 }

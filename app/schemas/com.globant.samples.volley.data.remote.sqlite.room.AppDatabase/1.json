@@ -2,12 +2,17 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "0fd8e83086c510f2c30db68b6aa856ab",
+    "identityHash": "c0135ea56a122b64dd9f6eb76ec7f1f7",
     "entities": [
       {
         "tableName": "repository",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `name` TEXT, `fullName` TEXT, `_private` INTEGER, `htmlUrl` TEXT, `description` TEXT, `fork` INTEGER, `url` TEXT, `forksUrl` TEXT, `keysUrl` TEXT, `collaboratorsUrl` TEXT, `teamsUrl` TEXT, `hooksUrl` TEXT, `issueEventsUrl` TEXT, `eventsUrl` TEXT, `assigneesUrl` TEXT, `branchesUrl` TEXT, `tagsUrl` TEXT, `blobsUrl` TEXT, `gitTagsUrl` TEXT, `gitRefsUrl` TEXT, `treesUrl` TEXT, `statusesUrl` TEXT, `languagesUrl` TEXT, `stargazersUrl` TEXT, `contributorsUrl` TEXT, `subscribersUrl` TEXT, `subscriptionUrl` TEXT, `commitsUrl` TEXT, `gitCommitsUrl` TEXT, `commentsUrl` TEXT, `issueCommentUrl` TEXT, `contentsUrl` TEXT, `compareUrl` TEXT, `mergesUrl` TEXT, `archiveUrl` TEXT, `downloadsUrl` TEXT, `issuesUrl` TEXT, `pullsUrl` TEXT, `milestonesUrl` TEXT, `notificationsUrl` TEXT, `labelsUrl` TEXT, `releasesUrl` TEXT, `deploymentsUrl` TEXT, `createdAt` TEXT, `updatedAt` TEXT, `pushedAt` TEXT, `gitUrl` TEXT, `sshUrl` TEXT, `cloneUrl` TEXT, `svnUrl` TEXT, `homepage` TEXT, `size` INTEGER, `stargazersCount` INTEGER, `watchersCount` INTEGER, `hasIssues` INTEGER, `hasProjects` INTEGER, `hasDownloads` INTEGER, `hasWiki` INTEGER, `hasPages` INTEGER, `forksCount` INTEGER, `openIssuesCount` INTEGER, `forks` INTEGER, `openIssues` INTEGER, `watchers` INTEGER, `defaultBranch` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userName` TEXT, `id` INTEGER, `name` TEXT, `fullName` TEXT, `_private` INTEGER, `htmlUrl` TEXT, `description` TEXT, `fork` INTEGER, `url` TEXT, `forksUrl` TEXT, `keysUrl` TEXT, `collaboratorsUrl` TEXT, `teamsUrl` TEXT, `hooksUrl` TEXT, `issueEventsUrl` TEXT, `eventsUrl` TEXT, `assigneesUrl` TEXT, `branchesUrl` TEXT, `tagsUrl` TEXT, `blobsUrl` TEXT, `gitTagsUrl` TEXT, `gitRefsUrl` TEXT, `treesUrl` TEXT, `statusesUrl` TEXT, `languagesUrl` TEXT, `stargazersUrl` TEXT, `contributorsUrl` TEXT, `subscribersUrl` TEXT, `subscriptionUrl` TEXT, `commitsUrl` TEXT, `gitCommitsUrl` TEXT, `commentsUrl` TEXT, `issueCommentUrl` TEXT, `contentsUrl` TEXT, `compareUrl` TEXT, `mergesUrl` TEXT, `archiveUrl` TEXT, `downloadsUrl` TEXT, `issuesUrl` TEXT, `pullsUrl` TEXT, `milestonesUrl` TEXT, `notificationsUrl` TEXT, `labelsUrl` TEXT, `releasesUrl` TEXT, `deploymentsUrl` TEXT, `createdAt` TEXT, `updatedAt` TEXT, `pushedAt` TEXT, `gitUrl` TEXT, `sshUrl` TEXT, `cloneUrl` TEXT, `svnUrl` TEXT, `homepage` TEXT, `size` INTEGER, `stargazersCount` INTEGER, `watchersCount` INTEGER, `hasIssues` INTEGER, `hasProjects` INTEGER, `hasDownloads` INTEGER, `hasWiki` INTEGER, `hasPages` INTEGER, `forksCount` INTEGER, `openIssuesCount` INTEGER, `forks` INTEGER, `openIssues` INTEGER, `watchers` INTEGER, `defaultBranch` TEXT, PRIMARY KEY(`id`))",
         "fields": [
+          {
+            "fieldPath": "userName",
+            "columnName": "userName",
+            "affinity": "TEXT"
+          },
           {
             "fieldPath": "id",
             "columnName": "id",
@@ -351,7 +356,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"0fd8e83086c510f2c30db68b6aa856ab\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"c0135ea56a122b64dd9f6eb76ec7f1f7\")"
     ]
   }
 }
