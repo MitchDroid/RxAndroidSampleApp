@@ -26,5 +26,5 @@ public interface UserApiService {
 
     @GET(ApiConstants.BASE_URL_REPOS + "{github_user_name}/repos")
     Observable<List<GithubUserRepo>> doGetUserRepos(@Path("github_user_name") String userName);
-    
+
 }

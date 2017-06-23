@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.globant.samples.volley.data.model.item.Item;
 import com.globant.samples.volley.data.remote.DataManager;
-import com.globant.samples.volley.data.remote.sqlite.room.DatabaseCreator;
+import com.globant.samples.volley.data.remote.database.DatabaseCreator;
 import com.globant.samples.volley.injection.qualifier.ApplicationContext;
 
 import java.util.List;

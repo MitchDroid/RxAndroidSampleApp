@@ -1,4 +1,4 @@
-package com.globant.samples.volley.data.remote.sqlite.room;
+package com.globant.samples.volley.data.remote.database;
 
 /**
  * Created by miller.barrera on 17/06/2017.
@@ -19,8 +19,6 @@ import javax.inject.Singleton;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-
-import static com.globant.samples.volley.data.remote.sqlite.room.AppDatabase.DATABASE_NAME;
 
 /**
  * Creates the {@link AppDatabase} asynchronously, exposing a LiveData object to notify of creation.
@@ -77,12 +75,12 @@ public class DatabaseCreator {
             context.getApplicationContext();
 
             // Reset the database to have new data on every run.
-            context.deleteDatabase(DATABASE_NAME);
+            context.deleteDatabase(AppDatabase.DATABASE_NAME);
 
             mContext = context;
 
             db = Room.databaseBuilder(mContext.getApplicationContext(),
-                    AppDatabase.class, DATABASE_NAME).build();
+                    AppDatabase.class, AppDatabase.DATABASE_NAME).build();
 
             return null;
         }).observeOn(AndroidSchedulers.mainThread()).doOnNext(t -> {

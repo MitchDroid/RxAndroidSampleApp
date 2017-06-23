@@ -11,7 +11,6 @@ import com.globant.samples.volley.R;
 import com.globant.samples.volley.data.model.item.Item;
 import com.globant.samples.volley.data.model.repository.GithubUserRepo;
 import com.globant.samples.volley.data.remote.ApiConstants;
-import com.globant.samples.volley.data.remote.sqlite.room.DatabaseCreator;
 import com.globant.samples.volley.ui.base.BaseActivity;
 import com.squareup.picasso.Picasso;
 

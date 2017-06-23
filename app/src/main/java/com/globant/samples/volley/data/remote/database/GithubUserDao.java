@@ -1,4 +1,4 @@
-package com.globant.samples.volley.data.remote.sqlite.room;
+package com.globant.samples.volley.data.remote.database;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;

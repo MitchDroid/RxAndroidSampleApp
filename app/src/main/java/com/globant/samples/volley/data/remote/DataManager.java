@@ -2,7 +2,6 @@ package com.globant.samples.volley.data.remote;
 
 import com.globant.samples.volley.data.model.repository.GithubUserRepo;
 import com.globant.samples.volley.data.model.user.GithubUser;
-import com.globant.samples.volley.data.remote.sqlite.room.GithubUserDao;
 
 import java.util.List;
 
