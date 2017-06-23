@@ -16,44 +16,51 @@ public class DataBaseQueries {
 
     @Inject
     DatabaseCreator mDatabaseCreator;
-    
-    AppDatabase db;
 
     @Inject
     public DataBaseQueries() {
-        db = mDatabaseCreator.getDatabase();
+
     }
 
     public void insertData(List<GithubUserRepo> products) {
         try {
-            db.beginTransaction();
-            db.userDao().insertAll(products);
+            getAppDatabaseInstance().beginTransaction();
+            getAppDatabaseInstance().userDao().insertAll(products);
         } finally {
-            db.setTransactionSuccessful();
-            db.endTransaction();
+            getAppDatabaseInstance().setTransactionSuccessful();
+            getAppDatabaseInstance().endTransaction();
         }
     }
 
     public List<GithubUserRepo> getAllUserReposList() {
         try {
-            db.beginTransaction();
-            return db.userDao().getAll();
+            getAppDatabaseInstance().beginTransaction();
+            return getAppDatabaseInstance().userDao().getAll();
 
         } finally {
-            db.setTransactionSuccessful();
-            db.endTransaction();
+            getAppDatabaseInstance().setTransactionSuccessful();
+            getAppDatabaseInstance().endTransaction();
         }
     }
 
     public List<GithubUserRepo> getReposListByUserName(String githubUserName) {
         try {
-            db.beginTransaction();
-            return db.userDao().getByUserName(githubUserName);
+            getAppDatabaseInstance().beginTransaction();
+            return getAppDatabaseInstance().userDao().getByUserName(githubUserName);
 
         } finally {
-            db.setTransactionSuccessful();
-            db.endTransaction();
+            getAppDatabaseInstance().setTransactionSuccessful();
+            getAppDatabaseInstance().endTransaction();
         }
     }
 
+
+    /**
+     * get the AppDatabase instance from {@link DatabaseCreator}
+     * @return AppDatabase instance
+     * */
+
+    public AppDatabase getAppDatabaseInstance(){
+        return mDatabaseCreator.getDatabase();
+    }
 }
