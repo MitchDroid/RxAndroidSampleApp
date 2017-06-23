@@ -9,13 +9,9 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.persistence.room.Room;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.globant.samples.volley.data.model.repository.GithubUserRepo;
-
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
@@ -23,7 +19,6 @@ import javax.inject.Singleton;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 import static com.globant.samples.volley.data.remote.sqlite.room.AppDatabase.DATABASE_NAME;
 
@@ -36,8 +31,6 @@ public class DatabaseCreator {
 
     private final MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
 
-    private AppDatabase mDb;
-
     private Context mContext;
 
     private final AtomicBoolean mInitializing = new AtomicBoolean(true);
@@ -49,6 +42,7 @@ public class DatabaseCreator {
 
     @Inject
     public DatabaseCreator() {
+
     }
 
 
@@ -61,7 +55,7 @@ public class DatabaseCreator {
 
     @Nullable
     public AppDatabase getDatabase() {
-        return mDb;
+        return db;
     }
 
     /**
@@ -104,47 +98,4 @@ public class DatabaseCreator {
         db.close();
     }
 
-    public void insertData(List<GithubUserRepo> products) {
-        // Build the database!
-        //ponerla como variable de instancia.
-
-        db.beginTransaction();
-        try {
-            db.userDao().insertAll(products);
-        } finally {
-            db.setTransactionSuccessful();
-            db.endTransaction();
-
-
-        }
-
-        mDb = db;
-    }
-
-    public List<GithubUserRepo> getAllUserReposList() {
-        // Build the database!
-        db.beginTransaction();
-        try {
-            return db.userDao().getAll();
-
-        } finally {
-            db.setTransactionSuccessful();
-            db.endTransaction();
-            mDb = db;
-
-        }
-    }
-
-    public List<GithubUserRepo> getReposListByUserName(String githubUserName) {
-        // Build the database!
-        db.beginTransaction();
-        try {
-            return db.userDao().getByUserName(githubUserName);
-
-        } finally {
-            db.setTransactionSuccessful();
-            db.endTransaction();
-            mDb = db;
-        }
-    }
 }

@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.globant.samples.volley.data.remote.DataManager;
+import com.globant.samples.volley.data.remote.sqlite.room.DataBaseQueries;
 import com.globant.samples.volley.data.remote.sqlite.room.DatabaseCreator;
 import com.globant.samples.volley.data.repository.UserRepository;
 import com.globant.samples.volley.data.repository.UserReposRepository;
@@ -37,5 +38,7 @@ public interface ApplicationComponent {
     UserReposRepository userRepositoryRepository();
 
     DatabaseCreator dataBaseCreator();
+
+    DataBaseQueries dataBaseQueries();
 
 }

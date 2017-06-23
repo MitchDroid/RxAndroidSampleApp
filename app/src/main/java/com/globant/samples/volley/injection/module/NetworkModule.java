@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.globant.samples.volley.data.remote.UserApiService;
+import com.globant.samples.volley.data.remote.factory.Factory;
 import com.globant.samples.volley.data.remote.sqlite.room.GithubUserDao;
 
 import javax.inject.Singleton;
@@ -33,7 +34,7 @@ public class NetworkModule {
     @Singleton
     @Provides
     public UserApiService userApiService() {
-        return UserApiService.Factory.create();
+        return Factory.create();
     }
 
 }

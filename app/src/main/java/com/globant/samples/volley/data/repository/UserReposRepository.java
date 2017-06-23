@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.globant.samples.volley.data.model.repository.GithubUserRepo;
 import com.globant.samples.volley.data.remote.DataManager;
+import com.globant.samples.volley.data.remote.sqlite.room.DataBaseQueries;
 import com.globant.samples.volley.data.remote.sqlite.room.DatabaseCreator;
 import com.globant.samples.volley.injection.qualifier.ApplicationContext;
 
@@ -26,6 +27,9 @@ public class UserReposRepository {
     DatabaseCreator mDatabaseCreator;
 
     @Inject
+    DataBaseQueries mDataBaseQueries;
+
+    @Inject
     @ApplicationContext
     Context mContext;
 
@@ -36,7 +40,7 @@ public class UserReposRepository {
 
     public Observable<List<GithubUserRepo>> getRepositories(String githubUserName) {
         mDatabaseCreator.createDb(mContext);
-        return Observable.fromCallable(() -> mDatabaseCreator.getReposListByUserName(githubUserName)).flatMap(githubUserRepos -> {
+        return Observable.fromCallable(() -> mDataBaseQueries.getReposListByUserName(githubUserName)).flatMap(githubUserRepos -> {
             if (!githubUserRepos.isEmpty()) {
                 return Observable.just(githubUserRepos);
             } else {
@@ -55,7 +59,7 @@ public class UserReposRepository {
                         githubUserRepo.get(i).setUserName(githubUserName);
                     }
                     mDatabaseCreator.createDb(mContext);
-                    mDatabaseCreator.insertData(githubUserRepo);
+                    mDataBaseQueries.insertData(githubUserRepo);
                 });
 
     }

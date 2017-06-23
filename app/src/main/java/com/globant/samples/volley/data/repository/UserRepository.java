@@ -3,7 +3,6 @@ package com.globant.samples.volley.data.repository;
 import android.content.Context;
 
 import com.globant.samples.volley.data.model.item.Item;
-import com.globant.samples.volley.data.model.repository.GithubUserRepo;
 import com.globant.samples.volley.data.remote.DataManager;
 import com.globant.samples.volley.data.remote.sqlite.room.DatabaseCreator;
 import com.globant.samples.volley.injection.qualifier.ApplicationContext;
@@ -15,7 +14,6 @@ import javax.inject.Singleton;
 
 import io.realm.Realm;
 import rx.Observable;
-import timber.log.Timber;
 
 /**
  * Created by miller.barrera on 13/06/2017.
