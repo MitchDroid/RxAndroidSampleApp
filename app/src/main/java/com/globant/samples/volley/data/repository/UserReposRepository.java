@@ -56,8 +56,6 @@ public class UserReposRepository {
                     }
                     mDatabaseCreator.createDb(mContext);
                     mDatabaseCreator.insertData(githubUserRepo);
-                    mDatabaseCreator.getDatabase().close();
-
                 });
 
     }

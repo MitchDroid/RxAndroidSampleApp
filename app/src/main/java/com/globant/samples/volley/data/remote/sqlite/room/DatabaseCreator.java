@@ -21,6 +21,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 import static com.globant.samples.volley.data.remote.sqlite.room.AppDatabase.DATABASE_NAME;
 
 /**
@@ -40,6 +44,8 @@ public class DatabaseCreator {
 
     // For Singleton instantiation
     private static final Object LOCK = new Object();
+
+    AppDatabase db;
 
     @Inject
     public DatabaseCreator() {
@@ -64,59 +70,52 @@ public class DatabaseCreator {
      * Although this uses an AsyncTask which currently uses a serial executor, it's thread-safe.
      */
     public void createDb(Context context) {
-
         Log.d("DatabaseCreator", "Creating DB from " + Thread.currentThread().getName());
 
         if (!mInitializing.compareAndSet(true, false)) {
             return; // Already initializing
         }
 
+        Observable.fromCallable(() -> {
+            Log.d("DatabaseCreator",
+                    "Starting bg job " + Thread.currentThread().getName());
+
+            context.getApplicationContext();
+
+            // Reset the database to have new data on every run.
+            context.deleteDatabase(DATABASE_NAME);
+
+            mContext = context;
+
+            db = Room.databaseBuilder(mContext.getApplicationContext(),
+                    AppDatabase.class, DATABASE_NAME).build();
+
+            return null;
+        }).observeOn(AndroidSchedulers.mainThread()).doOnNext(t -> {
+            // Now on the main thread, notify observers that the db is created and ready.
+            mIsDatabaseCreated.setValue(true);
+        }).subscribe(o -> {
+        });
+
         //mIsDatabaseCreated.setValue(false);// Trigger an update to show a loading screen.
-        new AsyncTask<Context, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Context... params) {
-                Log.d("DatabaseCreator",
-                        "Starting bg job " + Thread.currentThread().getName());
-
-                Context context = params[0].getApplicationContext();
-
-                // Reset the database to have new data on every run.
-                context.deleteDatabase(DATABASE_NAME);
-
-                mContext = context;
-
-                // Add a delay to simulate a long-running operation
-                addDelay();
-
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void ignored) {
-                // Now on the main thread, notify observers that the db is created and ready.
-                mIsDatabaseCreated.setValue(true);
-            }
-        }.execute(context.getApplicationContext());
     }
 
-    private void addDelay() {
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException ignored) {
-        }
+    public void closeDbInstance() {
+        db.close();
     }
 
     public void insertData(List<GithubUserRepo> products) {
         // Build the database!
-        AppDatabase db = Room.databaseBuilder(mContext.getApplicationContext(),
-                AppDatabase.class, DATABASE_NAME).build();
+        //ponerla como variable de instancia.
+
         db.beginTransaction();
         try {
             db.userDao().insertAll(products);
-            db.setTransactionSuccessful();
         } finally {
+            db.setTransactionSuccessful();
             db.endTransaction();
+
+
         }
 
         mDb = db;
@@ -124,36 +123,28 @@ public class DatabaseCreator {
 
     public List<GithubUserRepo> getAllUserReposList() {
         // Build the database!
-        AppDatabase db = Room.databaseBuilder(mContext.getApplicationContext(),
-                AppDatabase.class, DATABASE_NAME).build();
         db.beginTransaction();
         try {
+            return db.userDao().getAll();
 
-            db.setTransactionSuccessful();
         } finally {
+            db.setTransactionSuccessful();
             db.endTransaction();
+            mDb = db;
+
         }
-
-        mDb = db;
-
-        return db.userDao().getAll();
-
     }
 
     public List<GithubUserRepo> getReposListByUserName(String githubUserName) {
         // Build the database!
-        AppDatabase db = Room.databaseBuilder(mContext.getApplicationContext(),
-                AppDatabase.class, DATABASE_NAME).build();
         db.beginTransaction();
         try {
+            return db.userDao().getByUserName(githubUserName);
 
-            db.setTransactionSuccessful();
         } finally {
+            db.setTransactionSuccessful();
             db.endTransaction();
+            mDb = db;
         }
-
-        mDb = db;
-
-        return db.userDao().getByUserName(githubUserName);
     }
 }
