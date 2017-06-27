@@ -55,6 +55,7 @@ public class GithubUserListActivity extends BaseActivity implements UserListView
         mGitHubUsersListAdapter.setOnItemClickListener((view, position) -> {
             Timber.d("Position %s ", position);
             Bundle bundle = new Bundle();
+
             bundle.putParcelable(USER_ITEM_KEY, mGitHubUsersListAdapter.get(position));
 
             Intent intent = new Intent(this, UserDetailActivity.class);

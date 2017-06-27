@@ -1,7 +1,11 @@
 package com.globant.samples.volley.data.repository;
 
+import android.content.Context;
+
 import com.globant.samples.volley.data.model.item.Item;
 import com.globant.samples.volley.data.remote.DataManager;
+import com.globant.samples.volley.data.remote.database.DatabaseCreator;
+import com.globant.samples.volley.injection.qualifier.ApplicationContext;
 
 import java.util.List;
 
@@ -19,6 +23,14 @@ import rx.Observable;
 public class UserRepository {
 
     private DataManager mDataManager;
+
+    @Inject
+    DatabaseCreator mDatabaseCreator;
+
+    @Inject
+    @ApplicationContext
+    Context mContext;
+
 
     @Inject
     public UserRepository(DataManager mDataManager) {
@@ -61,4 +73,6 @@ public class UserRepository {
 
                 }));
     }
+
+
 }

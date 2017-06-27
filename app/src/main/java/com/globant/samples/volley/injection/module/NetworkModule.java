@@ -5,12 +5,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.globant.samples.volley.data.remote.UserApiService;
+import com.globant.samples.volley.data.remote.database.AppDatabase;
+import com.globant.samples.volley.data.remote.factory.Factory;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import io.realm.Realm;
 
 /**
  * Created by miller.barrera.
@@ -32,7 +33,7 @@ public class NetworkModule {
     @Singleton
     @Provides
     public UserApiService userApiService() {
-        return UserApiService.Factory.create();
+        return Factory.create();
     }
 
 }
