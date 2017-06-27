@@ -2,8 +2,12 @@ package com.globant.samples.volley.ui.userList;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.globant.samples.volley.R;
@@ -12,6 +16,7 @@ import com.globant.samples.volley.data.remote.ApiConstants;
 import com.globant.samples.volley.data.repository.UserRepository;
 import com.globant.samples.volley.ui.base.BaseActivity;
 import com.globant.samples.volley.ui.userDetails.UserDetailActivity;
+import com.globant.samples.volley.utils.EndlessRecyclerViewScrollListener;
 
 import java.util.List;
 
@@ -25,6 +30,7 @@ import timber.log.Timber;
 public class GithubUserListActivity extends BaseActivity implements UserListView {
 
 
+    private static final String EXTRA_ANIMAL_IMAGE_TRANSITION_NAME = "image_transition_name";
     CompositeSubscription mCompositeSubscription;
 
     @Inject
@@ -39,6 +45,12 @@ public class GithubUserListActivity extends BaseActivity implements UserListView
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
+    @BindView(R.id.progress)
+    ProgressBar mProgressBar;
+
+    private LinearLayoutManager mLayoutManager;
+    private EndlessRecyclerViewScrollListener mScrollListener;
+
     private static final String USER_ITEM_KEY = "user_item";
 
     @Override
@@ -48,26 +60,54 @@ public class GithubUserListActivity extends BaseActivity implements UserListView
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
 
+        mLayoutManager = new LinearLayoutManager(this);
+
         mRecyclerView.setAdapter(mGitHubUsersListAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        mScrollListener = new EndlessRecyclerViewScrollListener(mLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                loadNextDataFromApi(page);
+            }
+        };
+
+        mRecyclerView.addOnScrollListener(mScrollListener);// Adds the scroll listener to RecyclerView
 
 
-        mGitHubUsersListAdapter.setOnItemClickListener((view, position) -> {
+        mGitHubUsersListAdapter.setOnItemClickListener((view, position, imageView) -> {
             Timber.d("Position %s ", position);
             Bundle bundle = new Bundle();
 
             bundle.putParcelable(USER_ITEM_KEY, mGitHubUsersListAdapter.get(position));
 
             Intent intent = new Intent(this, UserDetailActivity.class);
+            intent.putExtra(EXTRA_ANIMAL_IMAGE_TRANSITION_NAME, ViewCompat.getTransitionName(imageView));
             intent.putExtras(bundle);
 
-            callActivity(intent);
-        });
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                    imageView, ViewCompat.getTransitionName(imageView));
 
+            startActivity(intent, options.toBundle());
+        });
         attachCompositeSubscription();
         fetchJSONRetrofitResponse();
 
     }
+
+    // Append the next page of data into the adapter
+    // This method probably sends out a network request and appends new data items to your adapter.
+    public void loadNextDataFromApi(int offset) {
+        // Send an API request to retrieve appropriate paginated data
+        //  --> Send the request including an offset value (i.e `page`) as a query parameter.
+        //  --> Deserialize and construct new model objects from the API response
+        //  --> Append the new data objects to the existing set of items inside the array of items
+        //  --> Notify the adapter of the new items made with `notifyItemRangeInserted()`
+    }
+
 
     /**
      * Get response from Github API service in

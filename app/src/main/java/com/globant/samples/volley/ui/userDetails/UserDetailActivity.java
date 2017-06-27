@@ -1,6 +1,8 @@
 package com.globant.samples.volley.ui.userDetails;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
@@ -12,6 +14,7 @@ import com.globant.samples.volley.data.model.item.Item;
 import com.globant.samples.volley.data.model.repository.GithubUserRepo;
 import com.globant.samples.volley.data.remote.ApiConstants;
 import com.globant.samples.volley.ui.base.BaseActivity;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -34,7 +37,7 @@ public class UserDetailActivity extends BaseActivity {
     @Inject
     UserDetailReposAdapter mUserDetailReposAdapter;
 
-    @BindView(R.id.user_image)
+    @BindView(R.id.userImage)
     ImageView mImage;
 
     @BindView(R.id.tv_github_user_name)
@@ -49,6 +52,8 @@ public class UserDetailActivity extends BaseActivity {
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
+    private static final String EXTRA_ANIMAL_IMAGE_TRANSITION_NAME = "image_transition_name";
+
     private static final String USER_ITEM_KEY = "user_item";
 
     @Override
@@ -57,6 +62,7 @@ public class UserDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_user_detail);
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
+        supportPostponeEnterTransition();
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -69,12 +75,20 @@ public class UserDetailActivity extends BaseActivity {
         if (b != null) {
             mItem = b.getParcelable(USER_ITEM_KEY);
 
-            setImage(mItem.getAvatarUrl());
+
             mUserName.setText(mItem.getLogin());
             mUserUrl.setText(mItem.getUrl());
             mUserRepositories.setText(mItem.getReposUrl());
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                String imageTransitionName = b.getString(EXTRA_ANIMAL_IMAGE_TRANSITION_NAME);
+                mImage.setTransitionName(imageTransitionName);
+            }
+
+            setImage(mItem.getAvatarUrl());
+
         }
+
 
         mRecyclerView.setAdapter(mUserDetailReposAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -106,7 +120,17 @@ public class UserDetailActivity extends BaseActivity {
     }
 
     public void setImage(String url) {
-        Picasso.with(this).load(url).fit().into(mImage);
+        Picasso.with(this).load(url).fit().into(mImage, new Callback() {
+            @Override
+            public void onSuccess() {
+                supportStartPostponedEnterTransition();
+            }
+
+            @Override
+            public void onError() {
+                supportStartPostponedEnterTransition();
+            }
+        });
     }
 
     public void attachCompositeSubscription() {

@@ -32,10 +32,11 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:id="@+id/user_image"
+                        android:id="@+id/userImage"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:layout_gravity="center_horizontal" />
+                        android:layout_gravity="center_horizontal"
+                        android:transitionName="user_image" />
 
                     <TextView
                         android:layout_width="match_parent"
