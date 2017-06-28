@@ -2,14 +2,13 @@ package com.globant.samples.volley.ui.userList;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.albinmathew.transitions.ActivityTransitionLauncher;
 import com.globant.samples.volley.R;
 import com.globant.samples.volley.data.model.item.Item;
 import com.globant.samples.volley.data.remote.ApiConstants;
@@ -69,8 +68,6 @@ public class GithubUserListActivity extends BaseActivity implements UserListView
         mScrollListener = new EndlessRecyclerViewScrollListener(mLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to the bottom of the list
                 loadNextDataFromApi(page);
             }
         };
@@ -85,13 +82,10 @@ public class GithubUserListActivity extends BaseActivity implements UserListView
             bundle.putParcelable(USER_ITEM_KEY, mGitHubUsersListAdapter.get(position));
 
             Intent intent = new Intent(this, UserDetailActivity.class);
-            intent.putExtra(EXTRA_ANIMAL_IMAGE_TRANSITION_NAME, ViewCompat.getTransitionName(imageView));
             intent.putExtras(bundle);
 
-            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
-                    imageView, ViewCompat.getTransitionName(imageView));
-
-            startActivity(intent, options.toBundle());
+            ActivityTransitionLauncher.with(GithubUserListActivity.this).from(imageView).launch(intent);
+//            callActivity(intent);
         });
         attachCompositeSubscription();
         fetchJSONRetrofitResponse();

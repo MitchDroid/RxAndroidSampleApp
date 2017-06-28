@@ -28,13 +28,10 @@ import butterknife.ButterKnife;
 
 public class GitHubUsersListAdapter extends RecyclerView.Adapter<GitHubUsersListAdapter.GitHubUsersAdapterViewHolder> {
 
-    // flag for footer ProgressBar (i.e. last item of list)
     private boolean isLoadingAdded = false;
-
     private List<Item> mList;
     private Context mContext;
     OnItemClickListener mItemClickListener;
-    private ImageView mImageView;
 
     @Inject
     public GitHubUsersListAdapter(Context context) {
@@ -81,7 +78,7 @@ public class GitHubUsersListAdapter extends RecyclerView.Adapter<GitHubUsersList
         @BindView(R.id.card_user_item_view)
         CardView mCardView;
 
-        @BindView(R.id.userImage)
+        @BindView(R.id.user_image)
         ImageView image;
 
         @BindView(R.id.name)

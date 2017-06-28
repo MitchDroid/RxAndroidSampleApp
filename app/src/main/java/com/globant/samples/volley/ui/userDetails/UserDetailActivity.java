@@ -1,14 +1,15 @@
 package com.globant.samples.volley.ui.userDetails;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.albinmathew.transitions.ActivityTransition;
+import com.albinmathew.transitions.ExitActivityTransition;
 import com.globant.samples.volley.R;
 import com.globant.samples.volley.data.model.item.Item;
 import com.globant.samples.volley.data.model.repository.GithubUserRepo;
@@ -37,7 +38,7 @@ public class UserDetailActivity extends BaseActivity {
     @Inject
     UserDetailReposAdapter mUserDetailReposAdapter;
 
-    @BindView(R.id.userImage)
+    @BindView(R.id.user_image)
     ImageView mImage;
 
     @BindView(R.id.tv_github_user_name)
@@ -51,6 +52,8 @@ public class UserDetailActivity extends BaseActivity {
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
+
+    private ExitActivityTransition exitTransition;
 
     private static final String EXTRA_ANIMAL_IMAGE_TRANSITION_NAME = "image_transition_name";
 
@@ -70,6 +73,7 @@ public class UserDetailActivity extends BaseActivity {
             getSupportActionBar().setTitle("User details");
         }
 
+
         Bundle b = this.getIntent().getExtras();
 
         if (b != null) {
@@ -80,11 +84,12 @@ public class UserDetailActivity extends BaseActivity {
             mUserUrl.setText(mItem.getUrl());
             mUserRepositories.setText(mItem.getReposUrl());
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                String imageTransitionName = b.getString(EXTRA_ANIMAL_IMAGE_TRANSITION_NAME);
-                mImage.setTransitionName(imageTransitionName);
-            }
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                String imageTransitionName = b.getString(EXTRA_ANIMAL_IMAGE_TRANSITION_NAME);
+//                mImage.setTransitionName(imageTransitionName);
+//            }
 
+            exitTransition = ActivityTransition.with(getIntent()).to(mImage).start(savedInstanceState);
             setImage(mItem.getAvatarUrl());
 
         }
@@ -120,17 +125,7 @@ public class UserDetailActivity extends BaseActivity {
     }
 
     public void setImage(String url) {
-        Picasso.with(this).load(url).fit().into(mImage, new Callback() {
-            @Override
-            public void onSuccess() {
-                supportStartPostponedEnterTransition();
-            }
-
-            @Override
-            public void onError() {
-                supportStartPostponedEnterTransition();
-            }
-        });
+        Picasso.with(this).load(url).fit().into(mImage);
     }
 
     public void attachCompositeSubscription() {
@@ -146,6 +141,22 @@ public class UserDetailActivity extends BaseActivity {
             mCompositeSubscription.clear();
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        exitTransition.exit(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            exitTransition.exit(this);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void showError(String message, @ApiConstants.ErrorType int errorType) {
