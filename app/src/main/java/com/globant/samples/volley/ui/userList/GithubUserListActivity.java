@@ -12,7 +12,6 @@ import com.albinmathew.transitions.ActivityTransitionLauncher;
 import com.globant.samples.volley.R;
 import com.globant.samples.volley.data.model.item.Item;
 import com.globant.samples.volley.data.remote.ApiConstants;
-import com.globant.samples.volley.data.repository.UserRepository;
 import com.globant.samples.volley.ui.base.BaseActivity;
 import com.globant.samples.volley.ui.userDetails.UserDetailActivity;
 import com.globant.samples.volley.utils.EndlessRecyclerViewScrollListener;
@@ -37,9 +36,6 @@ public class GithubUserListActivity extends BaseActivity implements UserListView
 
     @Inject
     GitHubUsersListAdapter mGitHubUsersListAdapter;
-
-    @Inject
-    UserRepository userRepository;
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;

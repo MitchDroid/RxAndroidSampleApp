@@ -1,7 +1,6 @@
 package com.globant.samples.volley.ui.userList;
 
-import android.os.HandlerThread;
-
+import com.globant.samples.volley.data.SchedulerHelper;
 import com.globant.samples.volley.data.model.item.Item;
 import com.globant.samples.volley.data.repository.UserRepository;
 import com.globant.samples.volley.ui.base.BasePresenter;
@@ -11,7 +10,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import rx.Observable;
-import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
 
 /**
@@ -21,16 +19,15 @@ import rx.android.schedulers.AndroidSchedulers;
 public class UsersListViewModel extends BasePresenter<UserListView> {
 
     private final UserRepository mUserRepository;
-    private Scheduler scheduler;
-    private HandlerThread handlerThread;
+
+    private final SchedulerHelper mScheduler;
 
 
     @Inject
-    public UsersListViewModel(UserRepository mUserRepository) {
+    public UsersListViewModel(UserRepository mUserRepository, SchedulerHelper scheduler) {
         this.mUserRepository = mUserRepository;
-        handlerThread = new HandlerThread("backgroundThread");
-        handlerThread.start();
-        scheduler = AndroidSchedulers.from(handlerThread.getLooper());
+        this.mScheduler = scheduler;
+
     }
 
 
@@ -41,8 +38,8 @@ public class UsersListViewModel extends BasePresenter<UserListView> {
      */
     public Observable<List<Item>> doActionGithubUser() {
         return mUserRepository.getUsers().filter(items -> items != null)
-                .observeOn(AndroidSchedulers.mainThread()).subscribeOn(scheduler)
-                .unsubscribeOn(scheduler);
+                .observeOn(AndroidSchedulers.mainThread()).subscribeOn(mScheduler.getmScheduler())
+                .unsubscribeOn(mScheduler.getmScheduler());
     }
 
 }
