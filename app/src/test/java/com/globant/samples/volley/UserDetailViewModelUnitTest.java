@@ -19,6 +19,7 @@ import rx.observers.TestSubscriber;
 import rx.plugins.RxJavaHooks;
 import rx.schedulers.Schedulers;
 
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
@@ -50,7 +51,7 @@ public class UserDetailViewModelUnitTest {
         });
 
         mUserReposRepository = Mockito.mock(UserReposRepository.class);
-        when(mUserReposRepository.getRepositories("mojombo")).thenReturn(Observable.just(mockedList()));
+        when(mUserReposRepository.getRepositories(anyString())).thenReturn(Observable.just(mockedList()));
 
         mUserDetailViewModel = new UserDetailViewModel(mUserReposRepository);
 
@@ -59,7 +60,7 @@ public class UserDetailViewModelUnitTest {
     @Test
     public void readRepositoriesList() throws Exception {
         TestSubscriber testSubscriber = new TestSubscriber();
-        mUserDetailViewModel.doActionGithubUserRepos("mojombo").subscribe(testSubscriber);
+        mUserDetailViewModel.doActionGithubUserRepos(anyString()).subscribe(testSubscriber);
 
         //asserts
         testSubscriber.assertNoErrors();
@@ -67,21 +68,17 @@ public class UserDetailViewModelUnitTest {
         testSubscriber.assertValueCount(1);
         testSubscriber.assertValue(mockedList());
         //verifications
-        Mockito.verify(mUserReposRepository, times(1)).getRepositories("mojombo");
+        Mockito.verify(mUserReposRepository, times(1)).getRepositories(anyString());
 
     }
 
 
     public List<GithubUserRepo> mockedList() {
         List<GithubUserRepo> mockedList = new ArrayList<>();
-        mockedList.add(new GithubUserRepo("mojombo", 17358646, "asteroids", "mojombo/asteroids"
-                , null, "https://github.com/mojombo/30daysoflaptops.github.io"));
-        mockedList.add(new GithubUserRepo("mojombo", 17358646, "asteroids", "mojombo/asteroids"
-                , null, "https://github.com/mojombo/30daysoflaptops.github.io"));
-        mockedList.add(new GithubUserRepo("mojombo", 17358646, "asteroids", "mojombo/asteroids"
-                , null, "https://github.com/mojombo/30daysoflaptops.github.io"));
-        mockedList.add(new GithubUserRepo("mojombo", 17358646, "asteroids", "mojombo/asteroids"
-                , null, "https://github.com/mojombo/30daysoflaptops.github.io"));
+        mockedList.add(new GithubUserRepo("mojombo", 17358646, "https://github.com/mojombo/30daysoflaptops.github.io"));
+        mockedList.add(new GithubUserRepo("mojombo", 17358646, "https://github.com/mojombo/30daysoflaptops.github.io"));
+        mockedList.add(new GithubUserRepo("mojombo", 17358646, "https://github.com/mojombo/30daysoflaptops.github.io"));
+        mockedList.add(new GithubUserRepo("mojombo", 17358646, "https://github.com/mojombo/30daysoflaptops.github.io"));
 
         return mockedList;
 
