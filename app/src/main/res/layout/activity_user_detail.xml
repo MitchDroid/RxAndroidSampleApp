@@ -28,19 +28,20 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:layout_margin="@dimen/dimen_item_user_margin"
                     android:orientation="vertical">
 
                     <ImageView
                         android:id="@+id/user_image"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_gravity="center_horizontal" />
+                        android:layout_width="@dimen/dimen_user_detail_image"
+                        android:layout_height="@dimen/dimen_user_detail_image"
+                        android:layout_gravity="center_horizontal"
+                        android:transitionName="@string/transition_image_view_name" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
+                        android:layout_margin="@dimen/dimen_item_user_margin"
                         android:gravity="center_horizontal"
                         android:text="Github User:"
                         android:textStyle="bold" />

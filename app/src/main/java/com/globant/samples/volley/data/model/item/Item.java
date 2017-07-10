@@ -94,6 +94,27 @@ public class Item extends RealmObject implements Parcelable {
     public Item() {
     }
 
+    public Item(String login, Integer id, String avatarUrl, String gravatarId, String url, String htmlUrl, String followersUrl, String followingUrl, String gistsUrl, String starredUrl, String subscriptionsUrl, String organizationsUrl, String reposUrl, String eventsUrl, String receivedEventsUrl, String type, Boolean siteAdmin, Double score) {
+        this.login = login;
+        this.id = id;
+        this.avatarUrl = avatarUrl;
+        this.gravatarId = gravatarId;
+        this.url = url;
+        this.htmlUrl = htmlUrl;
+        this.followersUrl = followersUrl;
+        this.followingUrl = followingUrl;
+        this.gistsUrl = gistsUrl;
+        this.starredUrl = starredUrl;
+        this.subscriptionsUrl = subscriptionsUrl;
+        this.organizationsUrl = organizationsUrl;
+        this.reposUrl = reposUrl;
+        this.eventsUrl = eventsUrl;
+        this.receivedEventsUrl = receivedEventsUrl;
+        this.type = type;
+        this.siteAdmin = siteAdmin;
+        this.score = score;
+    }
+
     public static final Creator<Item> CREATOR = new Creator<Item>() {
         @Override
         public Item createFromParcel(Parcel in) {
@@ -272,5 +293,68 @@ public class Item extends RealmObject implements Parcelable {
         parcel.writeString(eventsUrl);
         parcel.writeString(receivedEventsUrl);
         parcel.writeString(type);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Item item = (Item) o;
+
+        if (login != null ? !login.equals(item.login) : item.login != null) return false;
+        if (id != null ? !id.equals(item.id) : item.id != null) return false;
+        if (avatarUrl != null ? !avatarUrl.equals(item.avatarUrl) : item.avatarUrl != null)
+            return false;
+        if (gravatarId != null ? !gravatarId.equals(item.gravatarId) : item.gravatarId != null)
+            return false;
+        if (url != null ? !url.equals(item.url) : item.url != null) return false;
+        if (htmlUrl != null ? !htmlUrl.equals(item.htmlUrl) : item.htmlUrl != null) return false;
+        if (followersUrl != null ? !followersUrl.equals(item.followersUrl) : item.followersUrl != null)
+            return false;
+        if (followingUrl != null ? !followingUrl.equals(item.followingUrl) : item.followingUrl != null)
+            return false;
+        if (gistsUrl != null ? !gistsUrl.equals(item.gistsUrl) : item.gistsUrl != null)
+            return false;
+        if (starredUrl != null ? !starredUrl.equals(item.starredUrl) : item.starredUrl != null)
+            return false;
+        if (subscriptionsUrl != null ? !subscriptionsUrl.equals(item.subscriptionsUrl) : item.subscriptionsUrl != null)
+            return false;
+        if (organizationsUrl != null ? !organizationsUrl.equals(item.organizationsUrl) : item.organizationsUrl != null)
+            return false;
+        if (reposUrl != null ? !reposUrl.equals(item.reposUrl) : item.reposUrl != null)
+            return false;
+        if (eventsUrl != null ? !eventsUrl.equals(item.eventsUrl) : item.eventsUrl != null)
+            return false;
+        if (receivedEventsUrl != null ? !receivedEventsUrl.equals(item.receivedEventsUrl) : item.receivedEventsUrl != null)
+            return false;
+        if (type != null ? !type.equals(item.type) : item.type != null) return false;
+        if (siteAdmin != null ? !siteAdmin.equals(item.siteAdmin) : item.siteAdmin != null)
+            return false;
+        return score != null ? score.equals(item.score) : item.score == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = login != null ? login.hashCode() : 0;
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        result = 31 * result + (avatarUrl != null ? avatarUrl.hashCode() : 0);
+        result = 31 * result + (gravatarId != null ? gravatarId.hashCode() : 0);
+        result = 31 * result + (url != null ? url.hashCode() : 0);
+        result = 31 * result + (htmlUrl != null ? htmlUrl.hashCode() : 0);
+        result = 31 * result + (followersUrl != null ? followersUrl.hashCode() : 0);
+        result = 31 * result + (followingUrl != null ? followingUrl.hashCode() : 0);
+        result = 31 * result + (gistsUrl != null ? gistsUrl.hashCode() : 0);
+        result = 31 * result + (starredUrl != null ? starredUrl.hashCode() : 0);
+        result = 31 * result + (subscriptionsUrl != null ? subscriptionsUrl.hashCode() : 0);
+        result = 31 * result + (organizationsUrl != null ? organizationsUrl.hashCode() : 0);
+        result = 31 * result + (reposUrl != null ? reposUrl.hashCode() : 0);
+        result = 31 * result + (eventsUrl != null ? eventsUrl.hashCode() : 0);
+        result = 31 * result + (receivedEventsUrl != null ? receivedEventsUrl.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (siteAdmin != null ? siteAdmin.hashCode() : 0);
+        result = 31 * result + (score != null ? score.hashCode() : 0);
+        return result;
     }
 }

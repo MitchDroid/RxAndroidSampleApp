@@ -25,14 +25,6 @@ public class UserRepository {
     private DataManager mDataManager;
 
     @Inject
-    DatabaseCreator mDatabaseCreator;
-
-    @Inject
-    @ApplicationContext
-    Context mContext;
-
-
-    @Inject
     public UserRepository(DataManager mDataManager) {
         this.mDataManager = mDataManager;
     }

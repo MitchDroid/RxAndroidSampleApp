@@ -4,12 +4,12 @@ package com.globant.samples.volley.injection.component;
 import android.app.Application;
 import android.content.Context;
 
+import com.globant.samples.volley.data.SchedulerHelper;
 import com.globant.samples.volley.data.remote.DataManager;
-import com.globant.samples.volley.data.remote.database.AppDatabase;
 import com.globant.samples.volley.data.remote.database.DataBaseQueries;
 import com.globant.samples.volley.data.remote.database.DatabaseCreator;
-import com.globant.samples.volley.data.repository.UserRepository;
 import com.globant.samples.volley.data.repository.UserReposRepository;
+import com.globant.samples.volley.data.repository.UserRepository;
 import com.globant.samples.volley.injection.module.ApplicationModule;
 import com.globant.samples.volley.injection.module.NetworkModule;
 import com.globant.samples.volley.injection.qualifier.ApplicationContext;
@@ -35,6 +35,8 @@ public interface ApplicationComponent {
     DataManager dataManager();
 
     UserRepository userRepository();
+
+    SchedulerHelper schedulerHelper();
 
     UserReposRepository userRepositoryRepository();
 

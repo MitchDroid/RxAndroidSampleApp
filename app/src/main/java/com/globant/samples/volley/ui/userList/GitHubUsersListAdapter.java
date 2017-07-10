@@ -1,6 +1,7 @@
 package com.globant.samples.volley.ui.userList;
 
 import android.content.Context;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ import butterknife.ButterKnife;
 
 public class GitHubUsersListAdapter extends RecyclerView.Adapter<GitHubUsersListAdapter.GitHubUsersAdapterViewHolder> {
 
+    private boolean isLoadingAdded = false;
     private List<Item> mList;
     private Context mContext;
     OnItemClickListener mItemClickListener;
@@ -63,16 +65,20 @@ public class GitHubUsersListAdapter extends RecyclerView.Adapter<GitHubUsersList
 
     @Override
     public int getItemCount() {
-        return mList.size();
+        return mList == null ? 0 : mList.size();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return (position == mList.size() - 1 && isLoadingAdded) ? 0 : 0;
+    }
 
     public class GitHubUsersAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.card_user_item_view)
         CardView mCardView;
 
-        @BindView(R.id.image)
+        @BindView(R.id.user_image)
         ImageView image;
 
         @BindView(R.id.name)
@@ -91,11 +97,12 @@ public class GitHubUsersListAdapter extends RecyclerView.Adapter<GitHubUsersList
 
         public void setUserImage(String url) {
             Picasso.with(mContext).load(url).fit().into(image);
+            ViewCompat.setTransitionName(image, "user_image_transition");
         }
 
         public void onClick(View view) {
             if (mItemClickListener != null) {
-                mItemClickListener.onItemClick(view, getAdapterPosition());
+                mItemClickListener.onItemClick(view, getAdapterPosition(), image);
             }
         }
 
@@ -106,6 +113,6 @@ public class GitHubUsersListAdapter extends RecyclerView.Adapter<GitHubUsersList
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View view, int position);
+        void onItemClick(View view, int position, ImageView imageView);
     }
 }
