@@ -14,12 +14,11 @@ import javax.inject.Singleton;
 @Singleton
 public class DataBaseQueries {
 
-    @Inject
-    DatabaseCreator mDatabaseCreator;
+    private final DatabaseCreator mDatabaseCreator;
 
     @Inject
-    public DataBaseQueries() {
-
+    public DataBaseQueries(DatabaseCreator databaseCreator) {
+        this.mDatabaseCreator = databaseCreator;
     }
 
     public void insertData(List<GithubUserRepo> products) {
@@ -57,10 +56,11 @@ public class DataBaseQueries {
 
     /**
      * get the AppDatabase instance from {@link DatabaseCreator}
+     *
      * @return AppDatabase instance
-     * */
+     */
 
-    public AppDatabase getAppDatabaseInstance(){
+    public AppDatabase getAppDatabaseInstance() {
         return mDatabaseCreator.getDatabase();
     }
 }

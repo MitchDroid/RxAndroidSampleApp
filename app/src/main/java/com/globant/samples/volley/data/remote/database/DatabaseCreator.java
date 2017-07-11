@@ -12,6 +12,8 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.globant.samples.volley.injection.qualifier.ApplicationContext;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
@@ -29,14 +31,16 @@ public class DatabaseCreator {
 
     private final MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
 
-    private Context mContext;
-
     private final AtomicBoolean mInitializing = new AtomicBoolean(true);
 
     // For Singleton instantiation
     private static final Object LOCK = new Object();
 
     AppDatabase db;
+
+    @Inject
+    @ApplicationContext
+    Context mContext;
 
     @Inject
     public DatabaseCreator() {
@@ -61,7 +65,7 @@ public class DatabaseCreator {
      * <p>
      * Although this uses an AsyncTask which currently uses a serial executor, it's thread-safe.
      */
-    public void createDb(Context context) {
+    public void createDb() {
         Log.d("DatabaseCreator", "Creating DB from " + Thread.currentThread().getName());
 
         if (!mInitializing.compareAndSet(true, false)) {
@@ -72,15 +76,13 @@ public class DatabaseCreator {
             Log.d("DatabaseCreator",
                     "Starting bg job " + Thread.currentThread().getName());
 
-            context.getApplicationContext();
+            mContext.getApplicationContext();
 
             // Reset the database to have new data on every run.
-            context.deleteDatabase(AppDatabase.DATABASE_NAME);
+            mContext.deleteDatabase(AppDatabase.DATABASE_NAME);
 
-            mContext = context;
+            getAppDataBase();
 
-            db = Room.databaseBuilder(mContext.getApplicationContext(),
-                    AppDatabase.class, AppDatabase.DATABASE_NAME).build();
 
             return null;
         }).observeOn(AndroidSchedulers.mainThread()).doOnNext(t -> {
@@ -90,6 +92,13 @@ public class DatabaseCreator {
         });
 
         //mIsDatabaseCreated.setValue(false);// Trigger an update to show a loading screen.
+    }
+
+    public AppDatabase getAppDataBase() {
+        db = Room.databaseBuilder(mContext.getApplicationContext(),
+                AppDatabase.class, AppDatabase.DATABASE_NAME).build();
+
+        return db;
     }
 
     public void closeDbInstance() {

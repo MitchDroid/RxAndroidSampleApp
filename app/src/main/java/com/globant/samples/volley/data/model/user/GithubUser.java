@@ -25,6 +25,12 @@ public class GithubUser {
     @Expose
     private List<Item> items = null;
 
+    public GithubUser(Integer totalCount, Boolean incompleteResults, List<Item> items) {
+        this.totalCount = totalCount;
+        this.incompleteResults = incompleteResults;
+        this.items = items;
+    }
+
     public Integer getTotalCount() {
         return totalCount;
     }

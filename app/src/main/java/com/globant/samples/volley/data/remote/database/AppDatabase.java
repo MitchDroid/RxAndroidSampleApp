@@ -16,7 +16,7 @@ import javax.inject.Singleton;
 @Database(entities = {GithubUserRepo.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
-    static final String DATABASE_NAME = "repository-db";
+    public static final String DATABASE_NAME = "repository-db";
 
     public abstract GithubUserDao userDao();
 }

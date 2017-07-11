@@ -30,16 +30,12 @@ public class UserReposRepository {
     DataBaseQueries mDataBaseQueries;
 
     @Inject
-    @ApplicationContext
-    Context mContext;
-
-    @Inject
     public UserReposRepository(DataManager mDataManager) {
         this.mDataManager = mDataManager;
     }
 
     public Observable<List<GithubUserRepo>> getRepositories(String githubUserName) {
-        mDatabaseCreator.createDb(mContext);
+        mDatabaseCreator.createDb();
         return Observable.fromCallable(() -> mDataBaseQueries.getReposListByUserName(githubUserName)).flatMap(githubUserRepos -> {
             if (!githubUserRepos.isEmpty()) {
                 return Observable.just(githubUserRepos);
@@ -58,7 +54,7 @@ public class UserReposRepository {
                     for (int i = 0; i < githubUserRepo.size(); i++) {
                         githubUserRepo.get(i).setUserName(githubUserName);
                     }
-                    mDatabaseCreator.createDb(mContext);
+                    mDatabaseCreator.createDb();
                     mDataBaseQueries.insertData(githubUserRepo);
                 });
 
