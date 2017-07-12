@@ -70,7 +70,6 @@ public class GithubUserRepo implements Parcelable{
         this.htmlUrl = htmlUrl;
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -78,8 +77,7 @@ public class GithubUserRepo implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(userName);
-        parcel.writeString(htmlUrl);
+
     }
 
     @Override

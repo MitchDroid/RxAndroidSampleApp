@@ -23,7 +23,7 @@ public interface GithubUserDao {
     List<GithubUserRepo> getByUserName(String userName);
 
     @Insert
-    void insertAll(List<GithubUserRepo> products);
+    void insertAll(List<GithubUserRepo> userRepos);
 
     @Delete
     void delete(GithubUserRepo user);
