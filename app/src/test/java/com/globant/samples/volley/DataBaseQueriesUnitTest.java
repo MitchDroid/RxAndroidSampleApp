@@ -9,6 +9,7 @@ import com.globant.samples.volley.data.remote.database.DataBaseQueries;
 import com.globant.samples.volley.data.remote.database.DatabaseCreator;
 import com.globant.samples.volley.data.remote.database.GithubUserDao;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +20,8 @@ import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.observers.TestSubscriber;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -48,6 +51,7 @@ public class DataBaseQueriesUnitTest {
         mGithubUserDao = Mockito.mock(GithubUserDao.class);
         mAppDatabase = Mockito.mock(AppDatabase.class);
 
+
         mAppDatabase = Room.databaseBuilder(mContext,
                 AppDatabase.class, AppDatabase.DATABASE_NAME).allowMainThreadQueries().build();
 
@@ -61,9 +65,15 @@ public class DataBaseQueriesUnitTest {
 
     @Test
     public void tesReposByUserName() throws Exception {
+        TestSubscriber testSubscriber = new TestSubscriber();
         mDataBaseQueries.insertData(mockedList());
-        List<GithubUserRepo> theList = mDataBaseQueries.getReposListByUserName(anyString());
+        List<GithubUserRepo> theList = mDataBaseQueries.getReposListByUserName("mojombo");
         assertThat(theList.size(), is(4));
+    }
+
+    @After
+    public void closeDatabase(){
+        mDataBaseQueries.closeDatabase();
     }
 
 

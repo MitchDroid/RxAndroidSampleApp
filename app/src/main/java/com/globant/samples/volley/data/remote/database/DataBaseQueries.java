@@ -23,44 +23,39 @@ public class DataBaseQueries {
 
     public void insertData(List<GithubUserRepo> products) {
         try {
-            getAppDatabaseInstance().beginTransaction();
-            getAppDatabaseInstance().userDao().insertAll(products);
+            this.mDatabaseCreator.getDatabase().beginTransaction();
+            this.mDatabaseCreator.getDatabase().userDao().insertAll(products);
         } finally {
-            getAppDatabaseInstance().setTransactionSuccessful();
-            getAppDatabaseInstance().endTransaction();
+            this.mDatabaseCreator.getDatabase().setTransactionSuccessful();
+            this.mDatabaseCreator.getDatabase().endTransaction();
         }
     }
 
     public List<GithubUserRepo> getAllUserReposList() {
         try {
-            getAppDatabaseInstance().beginTransaction();
-            return getAppDatabaseInstance().userDao().getAll();
+            this.mDatabaseCreator.getDatabase().beginTransaction();
+            return this.mDatabaseCreator.getDatabase().userDao().getAll();
 
         } finally {
-            getAppDatabaseInstance().setTransactionSuccessful();
-            getAppDatabaseInstance().endTransaction();
+            this.mDatabaseCreator.getDatabase().setTransactionSuccessful();
+            this.mDatabaseCreator.getDatabase().endTransaction();
         }
     }
 
     public List<GithubUserRepo> getReposListByUserName(String githubUserName) {
         try {
-            getAppDatabaseInstance().beginTransaction();
-            return getAppDatabaseInstance().userDao().getByUserName(githubUserName);
+            this.mDatabaseCreator.getDatabase().beginTransaction();
+            return this.mDatabaseCreator.getDatabase().userDao().getByUserName(githubUserName);
 
         } finally {
-            getAppDatabaseInstance().setTransactionSuccessful();
-            getAppDatabaseInstance().endTransaction();
+            this.mDatabaseCreator.getDatabase().setTransactionSuccessful();
+            this.mDatabaseCreator.getDatabase().endTransaction();
         }
     }
 
 
-    /**
-     * get the AppDatabase instance from {@link DatabaseCreator}
-     *
-     * @return AppDatabase instance
-     */
-
-    public AppDatabase getAppDatabaseInstance() {
-        return mDatabaseCreator.getDatabase();
+    public void closeDatabase(){
+        this.mDatabaseCreator.closeDbInstance();
     }
+    
 }
