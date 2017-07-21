@@ -21,9 +21,8 @@ import org.robolectric.annotation.Config;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.observers.TestSubscriber;
-
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
@@ -51,29 +50,41 @@ public class DataBaseQueriesUnitTest {
         mGithubUserDao = Mockito.mock(GithubUserDao.class);
         mAppDatabase = Mockito.mock(AppDatabase.class);
 
-
         mAppDatabase = Room.databaseBuilder(mContext,
                 AppDatabase.class, AppDatabase.DATABASE_NAME).allowMainThreadQueries().build();
 
+        if(!mAppDatabase.isOpen()){
+            mAppDatabase.beginTransaction();
+        }
         when(mDatabaseCreator.getDatabase()).thenReturn(mAppDatabase);
         doNothing().when(mGithubUserDao).insertAll(mockedList());
         when(mGithubUserDao.getByUserName(anyString())).thenReturn(mockedList());
 
         mDataBaseQueries = new DataBaseQueries(mDatabaseCreator);
+
     }
 
 
     @Test
     public void tesReposByUserName() throws Exception {
-        TestSubscriber testSubscriber = new TestSubscriber();
         mDataBaseQueries.insertData(mockedList());
         List<GithubUserRepo> theList = mDataBaseQueries.getReposListByUserName("mojombo");
+        assertNotNull(theList);
         assertThat(theList.size(), is(4));
+
+    }
+
+    @Test
+    public void testGetAllUsers() throws Exception {
+        mDataBaseQueries.insertData(mockedList());
+        List<GithubUserRepo> allUsers = mDataBaseQueries.getAllUserReposList();
+        assertNotNull(allUsers);
+        assertThat(allUsers.size(), is(4));
     }
 
     @After
-    public void closeDatabase(){
-        mDataBaseQueries.closeDatabase();
+    public void tearDown() {
+        mAppDatabase.close();
     }
 
 

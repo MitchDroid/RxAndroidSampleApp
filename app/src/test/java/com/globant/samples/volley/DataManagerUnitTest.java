@@ -16,7 +16,6 @@ import java.util.List;
 import rx.Observable;
 import rx.observers.TestSubscriber;
 
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
@@ -50,8 +49,7 @@ public class DataManagerUnitTest {
         testSubscriber.assertValueCount(1);
         testSubscriber.assertValue(mockedUser());
 
-        assertNotNull(mDataManager.getGithubUsers());
-        Mockito.verify(mUserApiService, times(2)).doGetUsers();
+        Mockito.verify(mUserApiService, times(1)).doGetUsers();
 
 
     }
@@ -66,8 +64,7 @@ public class DataManagerUnitTest {
         testSubscriber.assertValueCount(1);
         testSubscriber.assertValue(mockedReposList());
 
-        assertNotNull(mDataManager.getGithubUserRepos(anyString()));
-        Mockito.verify(mUserApiService, times(2)).doGetUserRepos(anyString());
+        Mockito.verify(mUserApiService, times(1)).doGetUserRepos(anyString());
     }
 
     public GithubUser mockedUser() {
@@ -82,7 +79,6 @@ public class DataManagerUnitTest {
         mockedReposList.add(new GithubUserRepo("mojombo", 17358646, "https://github.com/mojombo/30daysoflaptops.github.io"));
 
         return mockedReposList;
-
     }
 
     public List<Item> mockedItemList() {
