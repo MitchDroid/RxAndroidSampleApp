@@ -37,7 +37,7 @@ public class GithubUserListActivity extends BaseActivity implements UserListView
     @Inject
     GitHubUsersListAdapter mGitHubUsersListAdapter;
 
-    @BindView(R.id.recycler_view)
+    @BindView(R.id.recycler_view_user_list)
     RecyclerView mRecyclerView;
 
     @BindView(R.id.progress)
