@@ -49,7 +49,7 @@ public class UserDetailActivity extends BaseActivity {
     @BindView(R.id.tv_github_user_repositories)
     TextView mUserRepositories;
 
-    @BindView(R.id.recycler_view_user_list)
+    @BindView(R.id.recycler_view_repos_list)
     RecyclerView mRecyclerView;
 
     private ExitActivityTransition exitTransition;
