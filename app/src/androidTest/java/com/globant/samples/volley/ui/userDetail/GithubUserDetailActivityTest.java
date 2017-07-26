@@ -1,23 +1,36 @@
 package com.globant.samples.volley.ui.userDetail;
 
+import android.app.Activity;
+import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.globant.samples.volley.R;
 import com.globant.samples.volley.data.model.item.Item;
 import com.globant.samples.volley.ui.userDetails.UserDetailActivity;
+import com.globant.samples.volley.ui.userList.GithubUserListActivity;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
+import static android.support.test.espresso.Espresso.registerIdlingResources;
+import static android.support.test.espresso.Espresso.unregisterIdlingResources;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.Intents.intending;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.globant.samples.volley.ui.userList.RecyclerViewItemCountAssertion.withItemCount;
@@ -29,9 +42,11 @@ import static com.globant.samples.volley.ui.userList.RecyclerViewItemCountAssert
 @RunWith(AndroidJUnit4.class)
 public class GithubUserDetailActivityTest {
 
+    private UserDetailActivityIdlingResource mIdlingResource;
+
     @Rule
-    public ActivityTestRule<UserDetailActivity> mActivityTestRule =
-            new ActivityTestRule<UserDetailActivity>(UserDetailActivity.class) {
+    public IntentsTestRule<UserDetailActivity> mActivityTestRule =
+            new IntentsTestRule<UserDetailActivity>(UserDetailActivity.class) {
                 @Override
                 protected Intent getActivityIntent() {
 
@@ -46,14 +61,15 @@ public class GithubUserDetailActivityTest {
                 }
             };
 
+    @Before
+    public void registerIntentServiceIdlingResource() {
+        UserDetailActivity activity = mActivityTestRule.getActivity();
+        mIdlingResource = new UserDetailActivityIdlingResource(activity);
+        registerIdlingResources(mIdlingResource);
+    }
+
     @Test
     public void githubUserListSizeActivityTest() {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         onView(withId(R.id.recycler_view_repos_list))
                 .check(withItemCount(30));
     }
@@ -66,6 +82,7 @@ public class GithubUserDetailActivityTest {
     @Test
     public void userDetailActionBackButtonActivityTest() {
         onView(withId(R.id.action_bar)).perform(click());
+        pressBack();
     }
 
 
@@ -78,5 +95,10 @@ public class GithubUserDetailActivityTest {
                 , "https://api.github.com/users/mojombo/repos", "https://api.github.com/users/mojombo/events{/privacy}"
                 , "https://api.github.com/users/mojombo/received_events", "User", false, 48.912292);
 
+    }
+
+    @After
+    public void unregisterIntentServiceIdlingResource() {
+        unregisterIdlingResources(mIdlingResource);
     }
 }

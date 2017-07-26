@@ -58,6 +58,8 @@ public class UserDetailActivity extends BaseActivity {
 
     private static final String USER_ITEM_KEY = "user_item";
 
+    private boolean isSync = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,6 +115,7 @@ public class UserDetailActivity extends BaseActivity {
             if (githubUserRepos != null) {
                 Timber.d("GITHUB USERS SIZE %s ", githubUserRepos.size());
                 populateRepostList(githubUserRepos);
+                isSync = true;
             }
 
         }, throwable -> showError(throwable.getMessage(), ApiConstants.LOW_ERROR)));
@@ -140,6 +143,10 @@ public class UserDetailActivity extends BaseActivity {
             mCompositeSubscription.clear();
         }
 
+    }
+
+    public boolean isIdleSyncFinished(){
+        return isSync;
     }
 
     @Override
